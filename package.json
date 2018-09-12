@@ -2,20 +2,30 @@
   "name": "kdbatis",
   "version": "0.1.0",
   "description": "kdbatis",
-  "main": "app.js",
+  "author": {
+    "name" : "KyoungDong Kim",
+    "email" : "kd52.kim@samsung.com"
+  },
+  "contributors": [
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified! Configure in package.json\" && exit 1"
   },
-  "repository": "",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/OldBlackJoe/kdbatis.git"
+  },
+  "main": "index.js",
   "keywords": [
     "node.js",
-    "eclipse",
-    "nodeclipse"
+    "mybatis"
   ],
   "dependencies": {
     "xml2js": "*"
   },
-  "author": "",
-  "license": "MIT",
+  "licenses": [ {
+    "type": "MIT",
+    "url": "http://www.opensource.org/licenses/MIT" 
+  } ],
   "readmeFilename": "README.md"
 }
