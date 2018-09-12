@@ -1,0 +1,21 @@
+{
+  "name": "kdbatis",
+  "version": "0.1.0",
+  "description": "kdbatis",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified! Configure in package.json\" && exit 1"
+  },
+  "repository": "",
+  "keywords": [
+    "node.js",
+    "eclipse",
+    "nodeclipse"
+  ],
+  "dependencies": {
+    "xml2js": "*"
+  },
+  "author": "",
+  "license": "MIT",
+  "readmeFilename": "README.md"
+}
