@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fruit">  
+	<select id="testStringParameter">
+    SELECT
+      name,
+      category,
+      price
+    FROM
+      fruits 
+    WHERE
+      category = #{category}
+	</select>
+
+  <select id="testIntegerParameter">
+    SELECT
+      name,
+      category,
+      price
+    FROM
+      fruits 
+    WHERE
+      price >= ${price}
+  </select>
+  
+  <select id="testIf">
+    SELECT
+      name,
+      category,
+      price
+    FROM
+      fruits 
+    WHERE
+      1=1
+      <if test="category != null and category !=''">
+        AND category = #{category}
+      </if>
+      <if test="price != null and price !=''">
+        AND price = ${price}
+      </if>
+      <if test="category == 'apple' and price >= 400">
+        AND name = 'Fuji'
+      </if>
+  </select>
+  
+  <select id="testWhere">
+    SELECT
+      name,
+      category,
+      price
+    FROM
+      fruits 
+    <where>
+        AND category = 'apple'
+        OR price = 200
+        AND
+    </where>
+  </select>
+  
+  <insert id="testInsert">
+    INSERT INTO
+      fruits
+    (
+      name,
+      category,
+      price      
+    )
+    VALUES
+    (
+      #{name},
+      #{category},
+      ${price}
+    )
+  </insert>
+  
+  <insert id="testInsertHeader">
+    INSERT INTO
+      fruits
+    (
+      name,
+      category,
+      price      
+    )
+    VALUES
+  </insert>
+  
+  <insert id="testInsertRows">
+    (
+      #{name},
+      #{category},
+      ${price}
+    )
+  </insert>
+</mapper>
