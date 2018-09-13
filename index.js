@@ -42,6 +42,12 @@ MybatisMapper.prototype.createMapper = function(mappers) {
 MybatisMapper.prototype.getStatement = function(namespace, sql, param) {
   var copyMapper = myBatisMapper[namespace][sql];
 
+  // Convert < > <= >=
+  copyMapper = copyMapper.replace(/(@lt@)/g, "<");
+  copyMapper = copyMapper.replace(/(@gt@)/g, ">");
+  copyMapper = copyMapper.replace(/(@lte@)/g, "<=");
+  copyMapper = copyMapper.replace(/(@gte@)/g, ">=");
+  
   copyMapper = dynamics.convertIf(copyMapper, param);
   copyMapper = dynamics.convertWhere(copyMapper);
   copyMapper = dynamics.convertForeach(copyMapper);
