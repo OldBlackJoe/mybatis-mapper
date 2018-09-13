@@ -3,18 +3,18 @@ var xml2js = require('xml2js');
 var dynamics = require('./lib/dynamics');
 var conceal = require('./lib/conceal');
 
-function kdbatis() {
-}
-
-var exportKD = new kdbatis();
 var myBatisMapper = {};
 
-kdbatis.prototype.createKDBatis = function(mappers) {
+function MybatisMapper() {
+  
+}
+
+MybatisMapper.prototype.createMapper = function(mappers) {
   var queryTypes = [ 'select', 'insert', 'update', 'delete' ];
 
   for (var i = 0, mapper; mapper = mappers[i]; i++) {
     var data = fs.readFileSync(mapper).toString();
-
+    
     data = conceal.concealIf(data);
     data = conceal.concealForeach(data);
     data = conceal.concealWhere(data);
@@ -39,7 +39,7 @@ kdbatis.prototype.createKDBatis = function(mappers) {
   }
 };
 
-kdbatis.prototype.getStatement = function(namespace, sql, param) {
+MybatisMapper.prototype.getStatement = function(namespace, sql, param) {
   var copyMapper = myBatisMapper[namespace][sql];
 
   copyMapper = dynamics.convertIf(copyMapper, param);
@@ -48,7 +48,7 @@ kdbatis.prototype.getStatement = function(namespace, sql, param) {
 
   if (param !== null) {
     if (Object.keys(param).length != 0) {
-      // #{...} 처리
+      // Convert #{...}
       for ( var key in param) {
         if (param[key] == null || param[key] == undefined) {
           var reg = new RegExp("\\#{" + key + "}", "g");
@@ -63,7 +63,7 @@ kdbatis.prototype.getStatement = function(namespace, sql, param) {
         }
       }
 
-      // ${...} 처리
+      // Convert ${...}
       for ( var key in param) {
         var reg = new RegExp("\\${" + key + "}", "g");
         var tempParamKey = (param[key] + "")
@@ -81,15 +81,15 @@ kdbatis.prototype.getStatement = function(namespace, sql, param) {
     throw new Error("Parameter failure " + copyMapper.match(/${.*?}/g));
   }
 
-  // WHERE 절 앞의 콤마 제거
+  // Remove comma(,) before WHERE
   var regex = new RegExp("(,)([\\s]*?)(where)", "gi");
   copyMapper = copyMapper.replace(regex, " WHERE ");
 
-  // SET 절 뒤의 콤마 제거
+  // Remove comma(,) after SET
   regex = new RegExp("(set)([\\s]*?)(,)", "gi");
   copyMapper = copyMapper.replace(regex, " SET ");
 
-  // < > <= >= 재배열
+  // Convert < > <= >=
   copyMapper = copyMapper.replace(/(@lt@)/g, "<");
   copyMapper = copyMapper.replace(/(@gt@)/g, ">");
   copyMapper = copyMapper.replace(/(@lte@)/g, "<=");
@@ -100,8 +100,8 @@ kdbatis.prototype.getStatement = function(namespace, sql, param) {
   return copyMapper;
 };
 
-kdbatis.prototype.getMapper = function() {
+MybatisMapper.prototype.getMapper = function() {
   return myBatisMapper;
 };
 
-exports.kdbatis = new kdbatis();
+module.exports = new MybatisMapper();
