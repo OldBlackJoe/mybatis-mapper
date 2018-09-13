@@ -6,7 +6,7 @@ var conceal = require('./lib/conceal');
 var myBatisMapper = {};
 
 function MybatisMapper() {
-  
+
 }
 
 MybatisMapper.prototype.createMapper = function(mappers) {
@@ -14,7 +14,7 @@ MybatisMapper.prototype.createMapper = function(mappers) {
 
   for (var i = 0, mapper; mapper = mappers[i]; i++) {
     var data = fs.readFileSync(mapper).toString();
-    
+
     data = conceal.concealIf(data);
     data = conceal.concealForeach(data);
     data = conceal.concealWhere(data);
@@ -28,9 +28,9 @@ MybatisMapper.prototype.createMapper = function(mappers) {
       var namespace = result.mapper.$.namespace;
       myBatisMapper[namespace] = {};
 
-      for (var k=0, queryType; queryType=queryTypes[k]; k++) {
+      for (var k = 0, queryType; queryType = queryTypes[k]; k++) {
         if (queryType in result.mapper) {
-          for (var j=0, sql; sql=result.mapper[queryType][j]; j++) {
+          for (var j = 0, sql; sql = result.mapper[queryType][j]; j++) {
             myBatisMapper[namespace][sql.$.id] = sql._;
           }
         }
@@ -94,6 +94,10 @@ MybatisMapper.prototype.getStatement = function(namespace, sql, param) {
   copyMapper = copyMapper.replace(/(@gt@)/g, ">");
   copyMapper = copyMapper.replace(/(@lte@)/g, "<=");
   copyMapper = copyMapper.replace(/(@gte@)/g, ">=");
+
+  // Remove whitespaces
+  copyMapper = copyMapper.replace(/^\s*\n/g, "");
+  copyMapper = copyMapper.replace(/\s*$/g, "");
 
   copyMapper = copyMapper.toString();
 
