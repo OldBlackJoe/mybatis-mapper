@@ -4,6 +4,7 @@ var dynamics = require('./lib/dynamics');
 var conceal = require('./lib/conceal');
 
 var myBatisMapper = {};
+var parser = new xml2js.Parser();
 
 function MybatisMapper() {
 
@@ -22,8 +23,7 @@ MybatisMapper.prototype.createMapper = function(mappers) {
     data = conceal.concealLte(data);
     data = conceal.concealGt(data);
     data = conceal.concealGte(data);
-
-    var parser = new xml2js.Parser();
+    
     parser.parseString(data, function(err, result) {
       var namespace = result.mapper.$.namespace;
       myBatisMapper[namespace] = {};
@@ -46,59 +46,8 @@ MybatisMapper.prototype.getStatement = function(namespace, sql, param) {
   copyMapper = dynamics.convertWhere(copyMapper);
   copyMapper = dynamics.convertForeach(copyMapper);
 
-  if (param !== null) {
-    if (Object.keys(param).length != 0) {
-      // Convert #{...}
-      for ( var key in param) {
-        if (param[key] == null || param[key] == undefined) {
-          var reg = new RegExp("\\#{" + key + "}", "g");
-          var tempParamKey = ("NULL")
-          // tempParamKey = tempParamKey.replace(/'/g, "\\\'");
-          copyMapper = copyMapper.replace(reg, tempParamKey);
-        } else {
-          var reg = new RegExp("#{" + key + "}", "g");
-          var tempParamKey = (param[key] + "").replace(/"/g, "\\\"");
-          tempParamKey = tempParamKey.replace(/'/g, "\\\'");
-          copyMapper = copyMapper.replace(reg, "'" + tempParamKey + "'");
-        }
-      }
-
-      // Convert ${...}
-      for ( var key in param) {
-        var reg = new RegExp("\\${" + key + "}", "g");
-        var tempParamKey = (param[key] + "")
-        // tempParamKey = tempParamKey.replace(/'/g, "\\\'");
-        copyMapper = copyMapper.replace(reg, tempParamKey);
-      }
-    }
-  }
-
-  if ((/#{.*?}/g).test(copyMapper)) {
-    throw new Error("Parameter failure " + copyMapper.match(/#{.*?}/g));
-  }
-
-  if ((/\${.*?}/g).test(copyMapper)) {
-    throw new Error("Parameter failure " + copyMapper.match(/${.*?}/g));
-  }
-
-  // Remove comma(,) before WHERE
-  var regex = new RegExp("(,)([\\s]*?)(where)", "gi");
-  copyMapper = copyMapper.replace(regex, " WHERE ");
-
-  // Remove comma(,) after SET
-  regex = new RegExp("(set)([\\s]*?)(,)", "gi");
-  copyMapper = copyMapper.replace(regex, " SET ");
-
-  // Convert < > <= >=
-  copyMapper = copyMapper.replace(/(@lt@)/g, "<");
-  copyMapper = copyMapper.replace(/(@gt@)/g, ">");
-  copyMapper = copyMapper.replace(/(@lte@)/g, "<=");
-  copyMapper = copyMapper.replace(/(@gte@)/g, ">=");
-
-  // Remove whitespaces
-  copyMapper = copyMapper.replace(/^\s*\n/g, "");
-  copyMapper = copyMapper.replace(/\s*$/g, "");
-
+  copyMapper = dynamics.convertParameters(copyMapper, param);
+  copyMapper = dynamics.convertAfterworks(copyMapper);
   copyMapper = copyMapper.toString();
 
   return copyMapper;
