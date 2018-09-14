@@ -11,7 +11,7 @@ function MybatisMapper() {
 }
 
 MybatisMapper.prototype.createMapper = function(mappers) {
-  var queryTypes = [ 'select', 'insert', 'update', 'delete' ];
+  var queryTypes = [ 'sql', 'select', 'insert', 'update', 'delete' ];
 
   for (var i = 0, mapper; mapper = mappers[i]; i++) {
     var data = fs.readFileSync(mapper).toString();
@@ -40,8 +40,13 @@ MybatisMapper.prototype.createMapper = function(mappers) {
 };
 
 MybatisMapper.prototype.getStatement = function(namespace, sql, param) {
+  
+  if (namespace == null || myBatisMapper[namespace] == undefined){
+    throw 
+  }
+  
   var copyMapper = myBatisMapper[namespace][sql];
-
+  
   // Convert < > <= >=
   copyMapper = copyMapper.replace(/(@lt@)/g, "<");
   copyMapper = copyMapper.replace(/(@gt@)/g, ">");
