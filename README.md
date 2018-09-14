@@ -62,12 +62,12 @@ mybatisMapper.createMapper([ './fruits.xml' ]);
 
 // SQL Parameters
 var param = {
-    category : 'apple'
-    param : 100
+    category : 'apple',
+    price : 100
 }
 
 // Get SQL Statement
-var query = mybatisMapper.getStatement('fruit', 'testParameters', param);
+var query = mybatisMapper.getStatement('fruit', 'testBasic', param);
 
 // Do it!
 connection.query(query, function(err, results, fields) {
