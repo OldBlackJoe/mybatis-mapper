@@ -45,6 +45,17 @@ describe("Query tests with parameters", function(){
     done();
   });
   
+  it("5) <foreach> elements", function(done){
+    var param = {
+        apples : [ 'Jonathan', 'Mcintosh', 'Fuji' ]        
+    }
+    
+    var query = mybatisMapper.getStatement('fruit', 'testForeach', param);
+    console.log(query);
+    
+    done();
+  });
+  
   it("6) <insert> elements : Simple Insert", function(done){
     var param = {
         name : 'Jonathan',
@@ -58,7 +69,6 @@ describe("Query tests with parameters", function(){
     done();
   });
   
-
   it("7) <insert> elements : Multiline Insert", function(done){
     var fruits = [
       {
@@ -89,5 +99,5 @@ describe("Query tests with parameters", function(){
     console.log(query);
     
     done();
-  });  
+  });
 });

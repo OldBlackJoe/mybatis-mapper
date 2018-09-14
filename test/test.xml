@@ -56,6 +56,21 @@
         AND
     </where>
   </select>
+
+  <select id="testForeach">
+    SELECT
+      name,
+      category,
+      price
+    FROM
+      fruits 
+    <where>
+      category = 'apple' AND
+      <foreach collection="apples" item="name"  open="(" close=")" separator="OR">
+        name = #{name}
+      </foreach>
+    </where>
+  </select>
   
   <insert id="testInsert">
     INSERT INTO

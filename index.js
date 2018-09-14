@@ -50,7 +50,7 @@ MybatisMapper.prototype.getStatement = function(namespace, sql, param) {
   
   copyMapper = dynamics.convertIf(copyMapper, param);
   copyMapper = dynamics.convertWhere(copyMapper);
-  copyMapper = dynamics.convertForeach(copyMapper);
+  copyMapper = dynamics.convertForeach(copyMapper, param);
 
   copyMapper = dynamics.convertParameters(copyMapper, param);
   copyMapper = dynamics.convertAfterworks(copyMapper);
