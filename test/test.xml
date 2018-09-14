@@ -88,7 +88,7 @@
     )
   </insert>
   
-  <insert id="testInsertHeader">
+  <insert id="testInsertMulti">
     INSERT INTO
       fruits
     (
@@ -97,13 +97,12 @@
       price      
     )
     VALUES
-  </insert>
-  
-  <insert id="testInsertRows">
+    <foreach collection="fruits" item="fruit"  separator=",">
     (
-      #{name},
-      #{category},
-      ${price}
+      #{fruit.name},
+      #{fruit.category},
+      ${fruit.price}
     )
+    </foreach>
   </insert>
 </mapper>

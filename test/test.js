@@ -70,34 +70,27 @@ describe("Query tests with parameters", function(){
   });
   
   it("7) <insert> elements : Multiline Insert", function(done){
-    var fruits = [
-      {
-        name : 'Jonathan',
-        category : 'apple',
-        price : 100        
-      },
-      {
-        name : 'Mcintosh',
-        category : 'apple',
-        price : 500
-      },
-      {
-        name : 'Fuji',
-        category : 'apple',
-        price : 300
-      }      
-    ]
-        
-    var query = mybatisMapper.getStatement('fruit', 'testInsertHeader', null);
-    
-    var insertRows = [];
-    for (var i=0; i<fruits.length; i++){
-      insertRows.push(mybatisMapper.getStatement('fruit', 'testInsertRows', fruits[i]));
+    var param = {
+      fruits : [
+        {
+          name : 'Jonathan',
+          category : 'apple',
+          price : 100        
+        },
+        {
+          name : 'Mcintosh',
+          category : 'apple',
+          price : 500
+        },
+        {
+          name : 'Fuji',
+          category : 'apple',
+          price : 300
+        }      
+      ]
     }
-    
-    query += insertRows.join(",");
+    var query = mybatisMapper.getStatement('fruit', 'testInsertMulti', param);
     console.log(query);
-    
     done();
   });
 });
