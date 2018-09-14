@@ -44,4 +44,15 @@ var query = mybatisMapper.getStatement('fruit', 'testStringParameter', param);
 console.log(query);
 ```
 
-
+#### result SQL ####
+```sql
+    SELECT
+      name,
+      category,
+      price
+    FROM
+      fruits 
+    WHERE
+      category = 'apple'
+      AND price > 100
+```
