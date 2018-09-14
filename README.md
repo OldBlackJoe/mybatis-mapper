@@ -120,3 +120,49 @@ console.log(query);
         AND price = 500
         AND name = 'Fuji'
 ```
+
+### 4) &lt;where&gt; element ###
+
+#### fruits.xml ####
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fruit">  
+  <select id="testWhere">
+    SELECT
+      name,
+      category,
+      price
+    FROM
+      fruits 
+    <where>
+        AND category = 'apple'
+        OR price = 200
+        AND
+    </where>
+  </select>
+</mapper>
+```
+
+#### fruits.js ####
+```javascript
+var mybatisMapper = require('../index');
+
+mybatisMapper.createMapper([ './fruits.xml' ]);
+var param = null;
+
+var query = mybatisMapper.getStatement('fruit', 'testWhere', param);
+console.log(query);
+```
+
+#### result SQL ####
+```sql
+    SELECT
+      name,
+      category,
+      price
+    FROM
+      fruits
+    WHERE  category = 'apple'
+        OR price = 200
+```
