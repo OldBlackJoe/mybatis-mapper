@@ -33,7 +33,7 @@ TBD
 #### fruits.js ####
 ```javascript
 var mybatisMapper = require('../index');
-mybatisMapper.createMapper([ './test.xml' ]);
+mybatisMapper.createMapper([ './fruits.xml' ]);
 
 var param = {
     category : 'apple'
@@ -56,3 +56,8 @@ console.log(query);
       category = 'apple'
       AND price > 100
 ```
+
+As in the example above, if a variable is enclosed in #{ }, the variable is wrapped in quotation marks.
+The other side, if the variable is enclosed in ${ }, the variable is converted as it is.
+In general, you can use #{ } for a String variable, and ${ } for a numeric value.
+
