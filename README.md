@@ -8,6 +8,8 @@ mybatis-mapper can generate SQL statements from the MyBatis3 Mapper XML file in 
 TBD
 
 ## Usage ##
+You can see descriptions of Dynamic SQL of MyBatis3 in the link below.
+http://www.mybatis.org/mybatis-3/dynamic-sql.html
 
 ### 1) Basic ###
 
@@ -36,7 +38,6 @@ TBD
 ```javascript
 var mybatisMapper = require('../index');
 mybatisMapper.createMapper([ './fruits.xml' ]);
-
 var param = {
     category : 'apple'
     param : 100
@@ -95,7 +96,6 @@ In general, you can use #{ } for a String variable, and ${ } for a numeric value
 #### fruits.js ####
 ```javascript
 var mybatisMapper = require('../index');
-
 mybatisMapper.createMapper([ './fruits.xml' ]);
 var param = {
     category : 'apple',
@@ -147,7 +147,6 @@ console.log(query);
 #### fruits.js ####
 ```javascript
 var mybatisMapper = require('../index');
-
 mybatisMapper.createMapper([ './fruits.xml' ]);
 var param = null;
 
@@ -165,4 +164,59 @@ console.log(query);
       fruits
     WHERE  category = 'apple'
         OR price = 200
+```
+
+### 5) &lt;foreach&gt; element - Basic ###
+
+#### fruits.xml ####
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fruit">  
+  <select id="testForeach">
+    SELECT
+      name,
+      category,
+      price
+    FROM
+      fruits 
+    <where>
+      category = 'apple' AND
+      <foreach collection="apples" item="name"  open="(" close=")" separator="OR">
+        name = #{name}
+      </foreach>
+    </where>
+  </select>
+</mapper>
+```
+
+#### fruits.js ####
+```javascript
+var mybatisMapper = require('../index');
+mybatisMapper.createMapper([ './fruits.xml' ]);
+var param = {
+    apples : [ 'Jonathan', 'Mcintosh', 'Fuji' ]        
+}
+
+var query = mybatisMapper.getStatement('fruit', 'testForeach', param);
+console.log(query);
+```
+
+#### result SQL ####
+```sql
+    SELECT
+      name,
+      category,
+      price
+    FROM
+      fruits
+    WHERE
+      category = 'apple' AND
+      (
+        name = "Jonathan"
+      OR
+        name = "Mcintosh"
+      OR
+        name = "Fuji"
+      )
 ```
