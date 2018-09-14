@@ -39,7 +39,7 @@ First, prepare XML file(s) written in MyBatis3 syntax like below. <br>
  - The XML file must have one 'mapper' element, which must have the 'namespace' attribute.
  - mybatis-mapper recognizes and parses the 'select', 'insert', 'update', and 'delete' elements in the 'mapper' element as SQL statements.
  - You do not need to use CDATA section in xml.
- - Sadly, other properties are ignored in the current version.
+ - Sadly, other attributes are ignored in the current version.
  
 Second, writing Node.js codes. <br>
 ```javascript
@@ -122,9 +122,9 @@ WHERE
   AND price > 100
 ```
 
-As in the example above, if a variable is enclosed in #{ }, the variable is wrapped in quotation marks. <br>
-The other side, if the variable is enclosed in ${ }, the variable is converted as it is. <br>
-In general, you can use #{ } for a String variable, and ${ } for a numeric value. <br>
+ - As in the example above, if a variable is enclosed in #{ }, the variable is wrapped in quotation marks.
+ - The other side, if the variable is enclosed in ${ }, the variable is converted as it is.
+ - In general, you can use #{ } for a String variable, and ${ } for a numeric value.
 
 ### 3) &lt;if&gt; element ###
 
