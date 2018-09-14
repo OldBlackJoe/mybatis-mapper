@@ -5,9 +5,9 @@ You can also use several major Dynamic SQL elements, for example, &lt;if&gt;, &l
 
 __Table of contents__
 
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [Future Goal](#future-goal)
+ - [Installation](#installation)
+ - [Usage](#usage)
+ - [Future Goal](#future-goal)
 
 ## Installation ##
 
@@ -360,5 +360,5 @@ VALUES
 ```
 
 ## Future Goal ##
-
-TBD
+ - Support additional Dynamic SQL elements.
+ - Detailed Error Handling.
