@@ -360,5 +360,5 @@ VALUES
 ```
 
 ## Future Goal ##
- - Support additional Dynamic SQL elements.
+ - Support additional Dynamic SQL elements like &lt;choose&gt;, &lt;trim&gt;, &lt;bind&gt;, etc.
  - Detailed Error Handling.
