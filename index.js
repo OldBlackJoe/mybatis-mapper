@@ -42,7 +42,11 @@ MybatisMapper.prototype.createMapper = function(mappers) {
 MybatisMapper.prototype.getStatement = function(namespace, sql, param) {
   
   if (namespace == null || myBatisMapper[namespace] == undefined){
-    throw 
+    throw new Error("Namespace Error : [" + namespace + "]");
+  }
+  
+  if (sql == null || myBatisMapper[namespace][sql] == undefined){
+    throw new Error("SQL ID Error : [" + sql + "]");
   }
   
   var copyMapper = myBatisMapper[namespace][sql];
