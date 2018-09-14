@@ -11,7 +11,9 @@ __Table of contents__
 
 ## Installation ##
 
-TBD
+```
+npm install --save mybatis-mapper
+```
 
 ## Usage ##
 You can see description of Dynamic SQL of MyBatis3 in the link below. <br>
