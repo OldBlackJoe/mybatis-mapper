@@ -1,6 +1,7 @@
 ## mybatis-mapper ##
 
-mybatis-mapper can generate SQL statements from the MyBatis3 Mapper XML file in node.js. You can also use several major Dynamic SQL elements, for example, &lt;if&gt;, &lt;where&gt;, &lt;foreach&gt;.
+mybatis-mapper can generate SQL statements from the MyBatis3 Mapper XML file in node.js. <br>
+You can also use several major Dynamic SQL elements, for example, &lt;if&gt;, &lt;where&gt;, &lt;foreach&gt;.
 
 
 ## Installation ##
@@ -8,12 +9,12 @@ mybatis-mapper can generate SQL statements from the MyBatis3 Mapper XML file in 
 TBD
 
 ## Usage ##
-You can see descriptions of Dynamic SQL of MyBatis3 in the link below.
+You can see descriptions of Dynamic SQL of MyBatis3 in the link below. <br>
 http://www.mybatis.org/mybatis-3/dynamic-sql.html
 
 ### 1) Basic ###
 
-First, prepare XML file(s) written in MyBatis3 syntax like below.
+First, prepare XML file(s) written in MyBatis3 syntax like below. <br>
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -30,9 +31,9 @@ First, prepare XML file(s) written in MyBatis3 syntax like below.
   </select>
 </mapper>
 ```
-The XML file must have one 'mapper' element, which must have the 'namespace' attribute.
-mybatis-mapper recognizes and parses the 'select', 'insert', 'update', and 'delete' elements in the 'mapper' element as SQL statements.
-You do not need to use CDATA section in xml.
+The XML file must have one 'mapper' element, which must have the 'namespace' attribute. <br>
+mybatis-mapper recognizes and parses the 'select', 'insert', 'update', and 'delete' elements in the 'mapper' element as SQL statements. <br>
+You do not need to use CDATA section in xml. <br>
 
 
 ### 2) Parameters ( #{...}, ${...} ) ###
@@ -82,9 +83,9 @@ WHERE
   AND price > 100
 ```
 
-As in the example above, if a variable is enclosed in #{ }, the variable is wrapped in quotation marks.
-The other side, if the variable is enclosed in ${ }, the variable is converted as it is.
-In general, you can use #{ } for a String variable, and ${ } for a numeric value.
+As in the example above, if a variable is enclosed in #{ }, the variable is wrapped in quotation marks. <br>
+The other side, if the variable is enclosed in ${ }, the variable is converted as it is. <br>
+In general, you can use #{ } for a String variable, and ${ } for a numeric value. <br>
 
 ### 3) &lt;if&gt; element ###
 
