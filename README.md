@@ -5,9 +5,9 @@ You can also use several major Dynamic SQL elements, for example, &lt;if&gt;, &l
 
 __Table of contents__
 
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [Future Goal](#future-goal)
+ - [Installation](#installation)
+ - [Usage](#usage)
+ - [Future Goal](#future-goal)
 
 ## Installation ##
 
@@ -20,6 +20,8 @@ http://www.mybatis.org/mybatis-3/dynamic-sql.html
 ### 1) Basic ###
 
 First, prepare XML file(s) written in MyBatis3 syntax like below. <br>
+
+#### fruits.xml ####
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -39,9 +41,11 @@ First, prepare XML file(s) written in MyBatis3 syntax like below. <br>
  - The XML file must have one 'mapper' element, which must have the 'namespace' attribute.
  - mybatis-mapper recognizes and parses the 'select', 'insert', 'update', and 'delete' elements in the 'mapper' element as SQL statements.
  - You do not need to use CDATA section in xml.
- - Sadly, other properties are ignored in the current version.
+ - Sadly, other attributes are ignored in the current version.
  
 Second, writing Node.js codes. <br>
+
+#### fruits.js ####
 ```javascript
 const mysql = require('mysql2');
 const mybatisMapper = require('mybatis-mapper');
@@ -58,12 +62,12 @@ mybatisMapper.createMapper([ './fruits.xml' ]);
 
 // SQL Parameters
 var param = {
-    category : 'apple'
-    param : 100
+    category : 'apple',
+    price : 100
 }
 
 // Get SQL Statement
-var query = mybatisMapper.getStatement('fruit', 'testParameters', param);
+var query = mybatisMapper.getStatement('fruit', 'testBasic', param);
 
 // Do it!
 connection.query(query, function(err, results, fields) {
@@ -122,9 +126,9 @@ WHERE
   AND price > 100
 ```
 
-As in the example above, if a variable is enclosed in #{ }, the variable is wrapped in quotation marks. <br>
-The other side, if the variable is enclosed in ${ }, the variable is converted as it is. <br>
-In general, you can use #{ } for a String variable, and ${ } for a numeric value. <br>
+ - As in the example above, if a variable is enclosed in #{ }, the variable is wrapped in quotation marks.
+ - The other side, if the variable is enclosed in ${ }, the variable is converted as it is.
+ - In general, you can use #{ } for a String variable, and ${ } for a numeric value.
 
 ### 3) &lt;if&gt; element ###
 
@@ -355,6 +359,6 @@ VALUES
 )
 ```
 
-## Future goal ##
-
-TBD
+## Future Goal ##
+ - Support additional Dynamic SQL elements like &lt;choose&gt;, &lt;trim&gt;, &lt;bind&gt;, etc.
+ - Detailed Error Handling.
