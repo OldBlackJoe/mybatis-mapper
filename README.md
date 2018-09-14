@@ -9,7 +9,7 @@ You can also use several major Dynamic SQL elements, for example, &lt;if&gt;, &l
 TBD
 
 ## Usage ##
-You can see descriptions of Dynamic SQL of MyBatis3 in the link below. <br>
+You can see description of Dynamic SQL of MyBatis3 in the link below. <br>
 http://www.mybatis.org/mybatis-3/dynamic-sql.html
 
 ### 1) Basic ###
@@ -34,6 +34,38 @@ First, prepare XML file(s) written in MyBatis3 syntax like below. <br>
 The XML file must have one 'mapper' element, which must have the 'namespace' attribute. <br>
 mybatis-mapper recognizes and parses the 'select', 'insert', 'update', and 'delete' elements in the 'mapper' element as SQL statements. <br>
 You do not need to use CDATA section in xml. <br>
+<br>
+Second, writing Node.js codes. <br>
+```javascript
+const mysql = require('mysql2');
+const mybatisMapper = require('mybatis-mapper');
+
+// create the connection to database
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  database: 'test'
+});
+
+// create the myBatisMapper from xml file
+mybatisMapper.createMapper([ './fruits.xml' ]);
+
+// SQL Parameters
+var param = {
+    category : 'apple'
+    param : 100
+}
+
+// Get SQL Statement
+var query = mybatisMapper.getStatement('fruit', 'testParameters', param);
+
+// Do it!
+connection.query(query, function(err, results, fields) {
+  console.log(results); 
+  console.log(fields);
+});
+```
+
 
 
 ### 2) Parameters ( #{...}, ${...} ) ###
