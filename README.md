@@ -3,6 +3,11 @@
 mybatis-mapper can generate SQL statements from the MyBatis3 Mapper XML file in node.js. <br>
 You can also use several major Dynamic SQL elements, for example, &lt;if&gt;, &lt;where&gt;, &lt;foreach&gt;.
 
+__Table of contents__
+
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Future Goal](#future-goal)
 
 ## Installation ##
 
@@ -349,3 +354,7 @@ VALUES
   500
 )
 ```
+
+## Future goal ##
+
+TBD
