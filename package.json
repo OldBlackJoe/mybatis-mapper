@@ -1,7 +1,7 @@
 {
-  "name": "kdbatis",
+  "name": "mybatis-mapper",
   "version": "0.1.0",
-  "description": "kdbatis",
+  "description": "mybatis-mapper",
   "author": {
     "name" : "KyoungDong Kim",
     "email" : "kd52.kim@samsung.com"
@@ -9,23 +9,21 @@
   "contributors": [
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified! Configure in package.json\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type" : "git",
-    "url" : "https://github.com/OldBlackJoe/kdbatis.git"
+    "url" : "https://github.com/OldBlackJoe/mybatis-mapper.git"
   },
   "main": "index.js",
   "keywords": [
     "node.js",
-    "mybatis"
+    "mybatis",
+    "mysql"
   ],
   "dependencies": {
-    "xml2js": "*"
+    "xml2js": "0.4.19"
   },
-  "licenses": [ {
-    "type": "MIT",
-    "url": "http://www.opensource.org/licenses/MIT" 
-  } ],
+  "license": "Apache-2.0",
   "readmeFilename": "README.md"
 }
