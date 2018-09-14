@@ -66,7 +66,8 @@ connection.query(query, function(err, results, fields) {
 });
 ```
 
-
+ - createMapper( [XML Files] ) : This method takes Array of XML files as a arguments. <br> Reads and parses the specified xml file to prepare the SQL statements.
+ - getStatement(Namespace, SqlID, Parameters) : This method takes Namespace, SQL ID, and Parameters as a arguments. <br> Create SQL statement from XML using Parameters and return it. <br> You can use this SQL string for Node.js MySQL Clients like mysql2.
 
 ### 2) Parameters ( #{...}, ${...} ) ###
 
