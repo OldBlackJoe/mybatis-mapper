@@ -49,15 +49,15 @@ console.log(query);
 
 #### result SQL ####
 ```sql
-    SELECT
-      name,
-      category,
-      price
-    FROM
-      fruits 
-    WHERE
-      category = 'apple'
-      AND price > 100
+SELECT
+  name,
+  category,
+  price
+FROM
+  fruits 
+WHERE
+  category = 'apple'
+  AND price > 100
 ```
 
 As in the example above, if a variable is enclosed in #{ }, the variable is wrapped in quotation marks.
@@ -108,17 +108,17 @@ console.log(query);
 
 #### result SQL ####
 ```sql
-    SELECT
-      name,
-      category,
-      price
-    FROM
-      fruits
-    WHERE
-      1=1
-        AND category = 'apple'
-        AND price = 500
-        AND name = 'Fuji'
+SELECT
+  name,
+  category,
+  price
+FROM
+  fruits
+WHERE
+  1=1
+    AND category = 'apple'
+    AND price = 500
+    AND name = 'Fuji'
 ```
 
 ### 4) &lt;where&gt; element ###
@@ -156,14 +156,14 @@ console.log(query);
 
 #### result SQL ####
 ```sql
-    SELECT
-      name,
-      category,
-      price
-    FROM
-      fruits
-    WHERE  category = 'apple'
-        OR price = 200
+SELECT
+  name,
+  category,
+  price
+FROM
+  fruits
+WHERE  category = 'apple'
+    OR price = 200
 ```
 
 ### 5) &lt;foreach&gt; element - Basic ###
@@ -204,19 +204,91 @@ console.log(query);
 
 #### result SQL ####
 ```sql
-    SELECT
+SELECT
+  name,
+  category,
+  price
+FROM
+  fruits
+WHERE
+  category = 'apple' AND
+  (
+    name = "Jonathan"
+  OR
+    name = "Mcintosh"
+  OR
+    name = "Fuji"
+  )
+```
+
+### 6) &lt;foreach&gt; element - Advanced ###
+
+#### fruits.xml ####
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fruit">  
+  <insert id="testInsertMulti">
+    INSERT INTO
+      fruits
+    (
       name,
       category,
-      price
-    FROM
-      fruits
-    WHERE
-      category = 'apple' AND
-      (
-        name = "Jonathan"
-      OR
-        name = "Mcintosh"
-      OR
-        name = "Fuji"
-      )
+      price      
+    )
+    VALUES
+    <foreach collection="fruits" item="fruit"  separator=",">
+    (
+      #{fruit.name},
+      #{fruit.category},
+      ${fruit.price}
+    )
+    </foreach>
+  </insert>
+</mapper>
+```
+
+#### fruits.js ####
+```javascript
+var mybatisMapper = require('../index');
+mybatisMapper.createMapper([ './fruits.xml' ]);
+var param = {
+  fruits : [
+    {
+      name : 'Jonathan',
+      category : 'apple',
+      price : 100        
+    },
+    {
+      name : 'Mcintosh',
+      category : 'apple',
+      price : 500
+    }
+  ]
+}
+var query = mybatisMapper.getStatement('fruit', 'testInsertMulti', param);
+console.log(query);
+```
+
+#### result SQL ####
+```sql
+INSERT INTO
+  fruits
+(
+  name,
+  category,
+  price
+)
+VALUES
+(
+  "Jonathan",
+  "apple",
+  100
+)
+,
+(
+  "Mcintosh",
+  "apple",
+  500
+)
 ```
