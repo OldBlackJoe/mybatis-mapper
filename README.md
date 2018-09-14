@@ -20,6 +20,8 @@ http://www.mybatis.org/mybatis-3/dynamic-sql.html
 ### 1) Basic ###
 
 First, prepare XML file(s) written in MyBatis3 syntax like below. <br>
+
+#### fruits.xml ####
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -42,6 +44,8 @@ First, prepare XML file(s) written in MyBatis3 syntax like below. <br>
  - Sadly, other attributes are ignored in the current version.
  
 Second, writing Node.js codes. <br>
+
+#### fruits.js ####
 ```javascript
 const mysql = require('mysql2');
 const mybatisMapper = require('mybatis-mapper');
@@ -355,6 +359,6 @@ VALUES
 )
 ```
 
-## Future goal ##
+## Future Goal ##
 
 TBD
