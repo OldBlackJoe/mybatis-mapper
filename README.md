@@ -13,6 +13,28 @@ http://www.mybatis.org/mybatis-3/dynamic-sql.html
 
 ### 1) Basic ###
 
+First, prepare XML file(s) written in MyBatis3 syntax like below.
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fruit">  
+  <select id="testBasic">
+    SELECT
+      name,
+      category,
+      price
+    FROM
+      fruits 
+    WHERE
+      category = 'apple'
+  </select>
+</mapper>
+```
+The XML file must have one 'mapper' element, which must have the 'namespace' attribute.
+mybatis-mapper recognizes and parses the 'select', 'insert', 'update', and 'delete' elements in the 'mapper' element as SQL statements.
+You do not need to use CDATA section in xml.
+
+
 ### 2) Parameters ( #{...}, ${...} ) ###
 
 #### fruits.xml ####
