@@ -93,4 +93,29 @@ describe("Query tests with parameters", function(){
     console.log(query);
     done();
   });
+  
+  it("8) Test <if> elements in <foreach>", function(done){
+    var param = {
+      fruits : [
+        {
+          name : 'Jonathan',
+          category : 'apple',
+          price : 100        
+        },
+        {
+          name : 'Mcintosh',
+          category : 'apple',
+          price : 500
+        },
+        {
+          name : 'Morado',
+          category : 'banana',
+          price : 300
+        }      
+      ]
+    }
+    var query = mybatisMapper.getStatement('fruit', 'testForeachIf', param);
+    console.log(query);
+    done();
+  });
 });

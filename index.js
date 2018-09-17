@@ -15,7 +15,7 @@ MybatisMapper.prototype.createMapper = function(mappers) {
 
   for (var i = 0, mapper; mapper = mappers[i]; i++) {
     var data = fs.readFileSync(mapper).toString();
-
+        
     data = conceal.concealIf(data);
     data = conceal.concealForeach(data);
     data = conceal.concealWhere(data);
@@ -57,12 +57,14 @@ MybatisMapper.prototype.getStatement = function(namespace, sql, param) {
   copyMapper = copyMapper.replace(/(@lte@)/g, "<=");
   copyMapper = copyMapper.replace(/(@gte@)/g, ">=");
   
+  copyMapper = dynamics.convertForeach(copyMapper, param);
   copyMapper = dynamics.convertIf(copyMapper, param);
   copyMapper = dynamics.convertWhere(copyMapper);
-  copyMapper = dynamics.convertForeach(copyMapper, param);
+  
 
   copyMapper = dynamics.convertParameters(copyMapper, param);
   copyMapper = dynamics.convertAfterworks(copyMapper);
+  
   copyMapper = copyMapper.toString();
 
   return copyMapper;

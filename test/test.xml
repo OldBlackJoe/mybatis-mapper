@@ -105,4 +105,24 @@
     )
     </foreach>
   </insert>
+  
+  <select id="testForeachIf">
+    INSERT INTO
+      fruits
+    (
+      name,
+      category,
+      price      
+    )
+    VALUES
+    <foreach collection="fruits" item="fruit"  separator=",">
+      <if test="fruit.category != null and fruit.category == 'apple'">
+        (
+          #{fruit.name},
+          #{fruit.category},
+          ${fruit.price}
+        )
+      </if>
+    </foreach>
+  </select>
 </mapper>
