@@ -363,4 +363,6 @@ VALUES
 
 ## Future Goal ##
  - Support additional Dynamic SQL elements like &lt;choose&gt;, &lt;trim&gt;, &lt;bind&gt;, etc.
+ - Support elements inside element.
  - Detailed Error Handling.
+
