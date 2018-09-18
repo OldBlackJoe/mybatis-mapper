@@ -153,9 +153,9 @@ WHERE
       </if>
       <if test="price != null and price !=''">
         AND price = ${price}
-      </if>
-      <if test="category == 'apple' and price >= 400">
-        AND name = 'Fuji'
+        <if test="category == 'apple' and price >= 400">
+          AND name = 'Fuji'
+        </if>
       </if>
   </select>
 </mapper>
