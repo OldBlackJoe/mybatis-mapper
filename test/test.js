@@ -12,9 +12,10 @@ describe("Query tests with parameters", function(){
     
     done();
   });
-  
+
   it("2) ${...} parameters", function(done){
     var param = {
+        category : 'apple',
         price : 300
     }
     
@@ -93,7 +94,7 @@ describe("Query tests with parameters", function(){
     console.log(query);
     done();
   });
-  
+
   it("8) Test <if> elements in <foreach>", function(done){
     var param = {
       fruits : [
@@ -116,6 +117,19 @@ describe("Query tests with parameters", function(){
     }
     var query = mybatisMapper.getStatement('fruit', 'testForeachIf', param);
     console.log(query);
+    done();
+  });
+
+  it("9) <if> inside <if>", function(done){
+    var param = {
+        name : 'Mcintosh',
+        category : 'apple',
+        price : 500
+    }
+    
+    var query = mybatisMapper.getStatement('fruit', 'testIfInsideIf', param);
+    console.log(query);
+    
     done();
   });
 });

@@ -20,7 +20,8 @@
     FROM
       fruits 
     WHERE
-      price >= ${price}
+      category = #{category}
+      AND price >= ${price}
   </select>
   
   <select id="testIf">
@@ -124,5 +125,25 @@
         )
       </if>
     </foreach>
+  </select>
+  
+  <select id="testIfInsideIf">
+    SELECT
+      name,
+      category,
+      price
+    FROM
+      fruits 
+    WHERE
+      1=1
+      <if test="category != null and category !=''">
+        AND category = #{category}
+        <if test="price != null and price !=''">
+          AND price = ${price}          
+        </if>
+        <if test="name != null and name !=''">
+          AND name = #{name}          
+        </if>
+      </if>
   </select>
 </mapper>
