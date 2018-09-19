@@ -13,11 +13,19 @@ MybatisMapper.prototype.createMapper = function(xmls) {
 
   // Parse each XML files
   for (var i = 0, xml; xml = xmls[i]; i++) {
-    var mappers = HTML.parse(fs.readFileSync(xml).toString());
-
-    for (var j = 0, mapper; mapper = mappers[j]; j++) {
-      // Mapping <mapper> tag recursively
-      findMapper(mapper);
+    try{
+      var mappers = HTML.parse(fs.readFileSync(xml).toString());
+    } catch (err){
+      throw new Error("mybatis-mapper : Error occured during open XML file [" + xml + "]");
+    }
+    
+    try{
+      for (var j = 0, mapper; mapper = mappers[j]; j++) {
+        // Mapping <mapper> tag recursively
+        findMapper(mapper);
+      }
+    } catch (err) {
+      throw new Error("mybatis-mapper : Error occured during parse XML file [" + xml + "]");
     }
   }
 };
@@ -25,49 +33,49 @@ MybatisMapper.prototype.createMapper = function(xmls) {
 findMapper = function(children) {
   var queryTypes = [ 'sql', 'select', 'insert', 'update', 'delete' ];
 
-  try {
-    if (children.type == 'tag' && children.name == 'mapper') {
-      // Add Mapper
-      myBatisMapper[children.attrs.namespace] = {};
+  if (children.type == 'tag' && children.name == 'mapper') {
+    // Add Mapper
+    myBatisMapper[children.attrs.namespace] = {};
 
-      for (var j = 0, sql; sql = children.children[j]; j++) {
-        if (sql['type'] == 'tag' && queryTypes.indexOf(sql['name']) > -1) {
-          myBatisMapper[children.attrs.namespace][sql.attrs.id] = sql.children;
-        }
-      }
-      return;
-    } else {
-      // Recursive to next children
-      if (children['children'] != null && children['children'].length > 0) {
-        for (var j = 0, nextChildren; nextChildren = children.children[j]; j++) {
-          findMapper(nextChildren);
-        }
-      } else {
-        return;
+    for (var j = 0, sql; sql = children.children[j]; j++) {
+      if (sql['type'] == 'tag' && queryTypes.indexOf(sql['name']) > -1) {
+        myBatisMapper[children.attrs.namespace][sql.attrs.id] = sql.children;
       }
     }
-  } catch (err) {
-    throw (err);
+    return;
+  } else {
+    // Recursive to next children
+    if (children['children'] != null && children['children'].length > 0) {
+      for (var j = 0, nextChildren; nextChildren = children.children[j]; j++) {
+        findMapper(nextChildren);
+      }
+    } else {
+      return;
+    }
   }
 }
 
 MybatisMapper.prototype.getStatement = function(namespace, sql, param) {
   var statement = '';
-
-  if (namespace == null || myBatisMapper[namespace] == undefined) {
-    throw new Error('Namespace Error : [' + namespace + ']');
+  
+  // Parameter Check
+  if (namespace == null) throw new Error('mybatis-mapper : Namespace should not be null.');
+  if (myBatisMapper[namespace] == undefined) throw new Error('mybatis-mapper : Namespace [' + namespace + '] not exists.');
+  if (sql == null) throw new Error('mybatis-mapper : SQL ID should not be null.');
+  if (myBatisMapper[namespace][sql] == undefined) throw new Error('mybatis-mapper : SQL ID [' + sql + '] not exists');
+  
+  try{
+    for (var i = 0, children; children = myBatisMapper[namespace][sql][i]; i++) {
+      // Convert SQL statement recursively
+      statement += convert.convertChildren(children, param);
+    }
+  
+    statement = convert.convertAfterworks(statement);
+  } catch (err) {
+    console.log(err);
+    throw new Error("mybatis-mapper : Error occured during convert SQL statement.")
   }
-
-  if (sql == null || myBatisMapper[namespace][sql] == undefined) {
-    throw new Error('SQL ID Error : [' + sql + ']');
-  }
-
-  for (var i = 0, children; children = myBatisMapper[namespace][sql][i]; i++) {
-    // Convert statement recursively
-    statement += convert.convertChildren(children, param);
-  }
-
-  statement = convert.convertAfterworks(statement);
+  
   return statement;
 };
 
