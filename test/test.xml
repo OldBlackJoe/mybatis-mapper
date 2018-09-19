@@ -146,4 +146,18 @@
         </if>
       </if>
   </select>
+  
+  <select id="testTrim">
+    SELECT
+      name,
+      category,
+      price
+    FROM
+      fruits 
+    <trim prefix="WHERE" prefixOverrides="AND|OR">
+        OR category = 'apple'
+        OR price = 200
+        AND
+    </trim>
+  </select>
 </mapper>

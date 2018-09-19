@@ -132,4 +132,13 @@ describe("Query tests with parameters", function(){
     
     done();
   });
+  
+  it("10) <trim> elements", function(done){
+    var param = null;
+    
+    var query = mybatisMapper.getStatement('fruit', 'testTrim', param);
+    console.log(query);
+    
+    done();
+  });
 });
