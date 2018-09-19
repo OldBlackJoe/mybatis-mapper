@@ -141,4 +141,17 @@ describe("Query tests with parameters", function(){
     
     done();
   });
+  
+  it("11) test <choose>", function(done){
+    var param = {
+        name : null,
+        category : 'apple',
+        price : 500
+    }
+    
+    var query = mybatisMapper.getStatement('fruit', 'testChoose', param);
+    console.log(query);
+    
+    done();
+  });
 });
