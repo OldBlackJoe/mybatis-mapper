@@ -37,7 +37,16 @@ describe("Query tests with parameters", function(){
     done();
   });
   
-  it("4) <where> elements", function(done){
+  it("4) <trim> elements", function(done){
+    var param = null;
+    
+    var query = mybatisMapper.getStatement('fruit', 'testTrim', param);
+    console.log(query);
+    
+    done();
+  });
+  
+  it("5) <where> elements", function(done){
     var param = null;
     
     var query = mybatisMapper.getStatement('fruit', 'testWhere', param);
@@ -46,7 +55,20 @@ describe("Query tests with parameters", function(){
     done();
   });
   
-  it("5) <foreach> elements", function(done){
+  it("6) <choose> <when> <otherwise> elements", function(done){
+    var param = {
+        name : null,
+        category : 'banana',
+        price : 500
+    }
+    
+    var query = mybatisMapper.getStatement('fruit', 'testChoose', param);
+    console.log(query);
+    
+    done();
+  });
+  
+  it("7) <foreach> elements", function(done){
     var param = {
         apples : [ 'Jonathan', 'Mcintosh', 'Fuji' ]        
     }
@@ -57,7 +79,7 @@ describe("Query tests with parameters", function(){
     done();
   });
   
-  it("6) <insert> elements : Simple Insert", function(done){
+  it("8) <insert> elements : Simple Insert", function(done){
     var param = {
         name : 'Jonathan',
         category : 'apple',
@@ -70,7 +92,7 @@ describe("Query tests with parameters", function(){
     done();
   });
   
-  it("7) <insert> elements : Multiline Insert", function(done){
+  it("9) <insert> elements : Multiline Insert", function(done){
     var param = {
       fruits : [
         {
@@ -95,7 +117,7 @@ describe("Query tests with parameters", function(){
     done();
   });
 
-  it("8) Test <if> elements in <foreach>", function(done){
+  it("10) <if> elements in <foreach>", function(done){
     var param = {
       fruits : [
         {
@@ -120,7 +142,7 @@ describe("Query tests with parameters", function(){
     done();
   });
 
-  it("9) <if> inside <if>", function(done){
+  it("11) <if> inside <if>", function(done){
     var param = {
         name : 'Mcintosh',
         category : 'apple',
@@ -128,28 +150,6 @@ describe("Query tests with parameters", function(){
     }
     
     var query = mybatisMapper.getStatement('fruit', 'testIfInsideIf', param);
-    console.log(query);
-    
-    done();
-  });
-  
-  it("10) <trim> elements", function(done){
-    var param = null;
-    
-    var query = mybatisMapper.getStatement('fruit', 'testTrim', param);
-    console.log(query);
-    
-    done();
-  });
-  
-  it("11) test <choose>", function(done){
-    var param = {
-        name : null,
-        category : 'apple',
-        price : 500
-    }
-    
-    var query = mybatisMapper.getStatement('fruit', 'testChoose', param);
     console.log(query);
     
     done();

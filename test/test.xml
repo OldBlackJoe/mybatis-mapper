@@ -43,7 +43,20 @@
         AND name = 'Fuji'
       </if>
   </select>
-  
+
+  <select id="testTrim">
+    SELECT
+      name,
+      category,
+      price
+    FROM
+      fruits 
+    <trim prefix="WHERE" prefixOverrides="AND|OR">
+        OR category = 'apple'
+        OR price = 200
+    </trim>
+  </select>
+
   <select id="testWhere">
     SELECT
       name,
@@ -57,7 +70,32 @@
         AND
     </where>
   </select>
-
+  
+  <select id="testChoose">
+    SELECT
+      name,
+      category,
+      price
+    FROM
+      fruits 
+    <where>
+      <choose>
+        <when test="name != null">
+          AND name = #{name}
+        </when>
+        <when test="category == 'banana">
+          AND category = #{category}
+          <if test="price != null and price !=''">
+            AND price = ${price}          
+          </if>
+        </when>
+        <otherwise>
+          AND category = 'apple'
+        </otherwise>
+      </choose>
+    </where>
+  </select>
+  
   <select id="testForeach">
     SELECT
       name,
@@ -145,44 +183,5 @@
           AND name = #{name}          
         </if>
       </if>
-  </select>
-  
-  <select id="testTrim">
-    SELECT
-      name,
-      category,
-      price
-    FROM
-      fruits 
-    <trim prefix="WHERE" prefixOverrides="AND|OR">
-        OR category = 'apple'
-        OR price = 200
-        AND
-    </trim>
-  </select>
-  
-  <select id="testChoose">
-    SELECT
-      name,
-      category,
-      price
-    FROM
-      fruits 
-    <where>
-      <choose>
-        <when test="name != null">
-          AND name = #{name}
-        </when>
-        <when test="category == 'banana">
-          AND category = #{category}
-          <if test="price != null and price !=''">
-            AND price = ${price}          
-          </if>
-        </when>
-        <otherwise>
-          AND category = 'apple'
-        </otherwise>
-      </choose>
-    </where>
   </select>
 </mapper>
