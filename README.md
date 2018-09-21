@@ -1,13 +1,14 @@
 ## mybatis-mapper ##
 
 mybatis-mapper can generate SQL statements from the MyBatis3 Mapper XML file in node.js. <br>
-You can also use several major Dynamic SQL elements, for example, &lt;if&gt;, &lt;where&gt;, &lt;foreach&gt;.
+You can also use Dynamic SQL elements, for example, &lt;if&gt;, &lt;where&gt;, &lt;foreach&gt;.
 
 __Table of contents__
 
  - [Installation](#installation)
  - [Usage](#usage)
  - [Future Goal](#future-goal)
+ - [Change Log](#change-log)
 
 ## Installation ##
 
@@ -43,7 +44,7 @@ First, prepare XML file(s) written in MyBatis3 syntax like below. <br>
  - The XML file must have one 'mapper' element, which must have the 'namespace' attribute.
  - mybatis-mapper recognizes and parses the 'select', 'insert', 'update', and 'delete' elements in the 'mapper' element as SQL statements.
  - You do not need to use CDATA section in xml.
- - Sadly, other attributes are ignored in the current version.
+ - other attributes are ignored.
  
 Second, writing Node.js codes. <br>
 
@@ -107,8 +108,8 @@ connection.query(query, function(err, results, fields) {
 var mybatisMapper = require('../index');
 mybatisMapper.createMapper([ './fruits.xml' ]);
 var param = {
-    category : 'apple'
-    param : 100
+    category : 'apple',
+    price : 100
 }
     
 var query = mybatisMapper.getStatement('fruit', 'testParameters', param);
@@ -153,7 +154,7 @@ WHERE
       </if>
       <if test="price != null and price !=''">
         AND price = ${price}
-        <if test="category == 'apple' and price >= 400">
+        <if test="price >= 400">
           AND name = 'Fuji'
         </if>
       </if>
@@ -184,12 +185,58 @@ FROM
   fruits
 WHERE
   1=1
-    AND category = 'apple'
-    AND price = 500
-    AND name = 'Fuji'
+  AND category = 'apple'
+  AND price = 500
+  AND name = 'Fuji'
 ```
 
-### 4) &lt;where&gt; element ###
+ - You can use dynamic SQL elements recursively. for example, &lt;if&gt;&lt;if&gt;&lt;/if&gt;&lt;/if&gt;
+ 
+### 4) &lt;trim&gt; element ###
+
+#### fruits.xml ####
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fruit">  
+  <select id="testTrim">
+    SELECT
+      name,
+      category,
+      price
+    FROM
+      fruits 
+    <trim prefix="WHERE" prefixOverrides="AND|OR">
+        OR category = 'apple'
+        OR price = 200
+    </trim>
+  </select>
+</mapper>
+```
+
+#### fruits.js ####
+```javascript
+var mybatisMapper = require('../index');
+mybatisMapper.createMapper([ './fruits.xml' ]);
+var param = null;
+
+var query = mybatisMapper.getStatement('fruit', 'testTrim', param);
+console.log(query);
+```
+
+#### result SQL ####
+```sql
+SELECT
+  name,
+  category,
+  price
+FROM
+  fruits
+WHERE  category = 'apple'
+    OR price = 200
+```
+
+### 5) &lt;where&gt; element ###
 
 #### fruits.xml ####
 ```xml
@@ -216,7 +263,9 @@ WHERE
 ```javascript
 var mybatisMapper = require('../index');
 mybatisMapper.createMapper([ './fruits.xml' ]);
-var param = null;
+var param = {
+    price : 500
+}
 
 var query = mybatisMapper.getStatement('fruit', 'testWhere', param);
 console.log(query);
@@ -234,7 +283,71 @@ WHERE  category = 'apple'
     OR price = 200
 ```
 
-### 5) &lt;foreach&gt; element - Basic ###
+
+
+
+
+### 6) &lt;choose&gt; &lt;when&gt; &lt;otherwise&gt; element ###
+
+#### fruits.xml ####
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fruit">  
+  <select id="testChoose">
+    SELECT
+      name,
+      category,
+      price
+    FROM
+      fruits 
+    <where>
+      <choose>
+        <when test="name != null">
+          AND name = #{name}
+        </when>
+        <when test="category == 'banana'">
+          AND category = #{category}
+          <if test="price != null and price !=''">
+            AND price = ${price}          
+          </if>
+        </when>
+        <otherwise>
+          AND category = 'apple'
+        </otherwise>
+      </choose>
+    </where>
+  </select>
+</mapper>
+```
+
+#### fruits.js ####
+```javascript
+var mybatisMapper = require('../index');
+mybatisMapper.createMapper([ './fruits.xml' ]);
+var param = {
+    name : null,
+    category : 'banana',
+    price : 300
+}
+
+var query = mybatisMapper.getStatement('fruit', 'testChoose', param);
+console.log(query);
+```
+
+#### result SQL ####
+```sql
+SELECT
+  name,
+  category,
+  price
+FROM
+  fruits
+WHERE  category = 'banana'
+  AND price = 300
+```
+
+### 7) &lt;foreach&gt; element - Basic ###
 
 #### fruits.xml ####
 ```xml
@@ -251,7 +364,9 @@ WHERE  category = 'apple'
     <where>
       category = 'apple' AND
       <foreach collection="apples" item="name"  open="(" close=")" separator="OR">
-        name = #{name}
+        <if test="name == 'Jonathan' or name == 'Fuji'">
+          name = #{name}
+        </if>        
       </foreach>
     </where>
   </select>
@@ -281,15 +396,13 @@ FROM
 WHERE
   category = 'apple' AND
   (
-    name = "Jonathan"
+    name = 'Jonathan'
   OR
-    name = "Mcintosh"
-  OR
-    name = "Fuji"
+    name = 'Fuji'
   )
 ```
 
-### 6) &lt;foreach&gt; element - Advanced ###
+### 8) &lt;foreach&gt; element - Advanced ###
 
 #### fruits.xml ####
 ```xml
@@ -362,7 +475,21 @@ VALUES
 ```
 
 ## Future Goal ##
- - Support additional Dynamic SQL elements like &lt;choose&gt;, &lt;trim&gt;, &lt;bind&gt;, etc.
- - Support elements inside element.
+ - Support additional Dynamic SQL elements like &lt;set&gt;, &lt;bind&gt;
  - Detailed Error Handling.
 
+
+## Change Log ##
+
+All notable changes to this project will be documented in this file. 
+
+### 0.2.0 ###
+
+* Change XML parsing library xml2js to html-parse-stringify2.
+* Dynamic SQL elements can use recursively. for example, &lt;if&gt;&lt;if&gt;&lt;/if&gt;&lt;/if&gt; 
+* Support lt;choose&gt; &lt;when&gt; &lt;otherwise&gt; element.
+* Support lt;trim&gt; element.
+
+#### 0.1.0 ###
+
+* Initial Version
