@@ -490,6 +490,6 @@ All notable changes to this project will be documented in this file.
 * Support &lt;choose&gt; &lt;when&gt; &lt;otherwise&gt; element.
 * Support &lt;trim&gt; element.
 
-#### 0.1.0 ###
+### 0.1.0 ###
 
 * Initial Version
