@@ -37,13 +37,14 @@ First, prepare XML file(s) written in MyBatis3 syntax like below. <br>
     FROM
       fruits 
     WHERE
-      category = 'apple'
+      category = 'apple' AND
+      <![CDATA[ price < 500 ]]>
   </select>
 </mapper>
 ```
  - The XML file must have one 'mapper' element, which must have the 'namespace' attribute.
  - mybatis-mapper recognizes and parses the 'select', 'insert', 'update', and 'delete' elements in the 'mapper' element as SQL statements.
- - You do not need to use CDATA section in xml.
+ - You can use CDATA section in xml if you want to use <, &, ".
  - other attributes are ignored.
  
 Second, writing Node.js codes. <br>
