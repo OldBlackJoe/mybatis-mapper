@@ -485,6 +485,7 @@ VALUES
 ### 0.3.0 ###
 
 * Support CDATA section
+* Bug fix & Error Handling
 
 ### 0.2.0 ###
 
