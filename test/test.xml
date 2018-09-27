@@ -193,7 +193,7 @@
     FROM
       fruits 
     WHERE
-      price <![CDATA[ < 500 ]]> AND
+      <![CDATA[ price < 500 AND ]]>
       name = <![CDATA[ "&It is CDATA test><"  ]]>
   </select>
 </mapper>

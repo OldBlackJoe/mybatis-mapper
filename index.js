@@ -14,10 +14,10 @@ MybatisMapper.prototype.createMapper = function(xmls) {
   // Parse each XML files
   for (var i = 0, xml; xml = xmls[i]; i++) {
     try{
-      var rawText = replaceCdata(fs.readFileSync(xml).toString());
+      var rawText = replaceCdata(fs.readFileSync(xml).toString());     
       var mappers = HTML.parse(rawText);
     } catch (err){
-			throw new Error("mybatis-mapper : Error occured during open XML file [" + xml + "]");
+			throw new Error("Error occured during open XML file [" + xml + "]");
     }
     
     try{
@@ -26,7 +26,7 @@ MybatisMapper.prototype.createMapper = function(xmls) {
         findMapper(mapper);
       }
     } catch (err) {
-      throw new Error("mybatis-mapper : Error occured during parse XML file [" + xml + "]");
+      throw new Error("Error occured during parse XML file [" + xml + "]");
     }
   }
 };
@@ -82,10 +82,10 @@ MybatisMapper.prototype.getStatement = function(namespace, sql, param) {
   var statement = '';
   
   // Parameter Check
-  if (namespace == null) throw new Error('mybatis-mapper : Namespace should not be null.');
-  if (myBatisMapper[namespace] == undefined) throw new Error('mybatis-mapper : Namespace [' + namespace + '] not exists.');
-  if (sql == null) throw new Error('mybatis-mapper : SQL ID should not be null.');
-  if (myBatisMapper[namespace][sql] == undefined) throw new Error('mybatis-mapper : SQL ID [' + sql + '] not exists');
+  if (namespace == null) throw new Error('Namespace should not be null.');
+  if (myBatisMapper[namespace] == undefined) throw new Error('Namespace [' + namespace + '] not exists.');
+  if (sql == null) throw new Error('SQL ID should not be null.');
+  if (myBatisMapper[namespace][sql] == undefined) throw new Error('SQL ID [' + sql + '] not exists');
 
   try{
     for (var i = 0, children; children = myBatisMapper[namespace][sql][i]; i++) {
@@ -95,8 +95,7 @@ MybatisMapper.prototype.getStatement = function(namespace, sql, param) {
   
     statement = convert.convertAfterworks(statement);
   } catch (err) {
-    console.log(err);
-    throw new Error("mybatis-mapper : Error occured during convert SQL statement.")
+    throw err
   }
   
   return statement;
