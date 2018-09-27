@@ -14,9 +14,10 @@ MybatisMapper.prototype.createMapper = function(xmls) {
   // Parse each XML files
   for (var i = 0, xml; xml = xmls[i]; i++) {
     try{
-      var mappers = HTML.parse(fs.readFileSync(xml).toString());
+      var rawText = replaceCdata(fs.readFileSync(xml).toString());
+      var mappers = HTML.parse(rawText);
     } catch (err){
-      throw new Error("mybatis-mapper : Error occured during open XML file [" + xml + "]");
+			throw new Error("mybatis-mapper : Error occured during open XML file [" + xml + "]");
     }
     
     try{
@@ -55,6 +56,28 @@ findMapper = function(children) {
   }
 }
 
+replaceCdata = function(rawText) {
+  var cdataRegex = new RegExp('(<!\\[CDATA\\[)([\\s\\S]*?)(\\]\\]>)', 'g');
+  var matches = rawText.match(cdataRegex);
+  
+  if (matches != null && matches.length > 0) {
+    for (var z = 0; z < matches.length; z++) {
+      var cdataRegex = new RegExp('(<!\\[CDATA\\[)([\\s\\S]*?)(\\]\\]>)', 'g');
+      var m = cdataRegex.exec(matches[z]);
+
+      var cdataText = m[2];
+      cdataText = cdataText.replace(/\&/g,'&amp;');
+      cdataText = cdataText.replace(/\</g,'&lt;');
+      cdataText = cdataText.replace(/\>/g,'&gt;');
+      cdataText = cdataText.replace(/\"/g,'&quot;');
+      
+      rawText = rawText.replace(m[0], cdataText);
+    }
+  }
+  
+  return rawText;
+}
+
 MybatisMapper.prototype.getStatement = function(namespace, sql, param) {
   var statement = '';
   
@@ -63,7 +86,7 @@ MybatisMapper.prototype.getStatement = function(namespace, sql, param) {
   if (myBatisMapper[namespace] == undefined) throw new Error('mybatis-mapper : Namespace [' + namespace + '] not exists.');
   if (sql == null) throw new Error('mybatis-mapper : SQL ID should not be null.');
   if (myBatisMapper[namespace][sql] == undefined) throw new Error('mybatis-mapper : SQL ID [' + sql + '] not exists');
-  
+
   try{
     for (var i = 0, children; children = myBatisMapper[namespace][sql][i]; i++) {
       // Convert SQL statement recursively
