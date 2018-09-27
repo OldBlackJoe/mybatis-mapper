@@ -482,6 +482,10 @@ VALUES
 
 ## Change Log ##
 
+### 0.3.0 ###
+
+* Support CDATA section
+
 ### 0.2.0 ###
 
 * Change XML parsing library xml2js to html-parse-stringify2.
