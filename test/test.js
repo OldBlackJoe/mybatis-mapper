@@ -13,6 +13,7 @@ describe("Query tests with parameters", function(){
     done();
   });
 
+  
   it("2) ${...} parameters", function(done){
     var param = {
         category : 'apple',
@@ -150,6 +151,15 @@ describe("Query tests with parameters", function(){
     }
     
     var query = mybatisMapper.getStatement('fruit', 'testIfInsideIf', param);
+    console.log(query);
+    
+    done();
+  });
+
+  it("12) test <![CDATA[  ]]>", function(done){
+    var param = null;
+    
+    var query = mybatisMapper.getStatement('fruit', 'testCdata', param);
     console.log(query);
     
     done();

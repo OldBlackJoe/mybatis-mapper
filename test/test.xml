@@ -184,4 +184,16 @@
         </if>
       </if>
   </select>
+  
+  <select id="testCdata">
+    SELECT
+      name,
+      category,
+      price
+    FROM
+      fruits 
+    WHERE
+      price <![CDATA[ < 500 ]]> AND
+      name = <![CDATA[ "&It is CDATA test><"  ]]>
+  </select>
 </mapper>

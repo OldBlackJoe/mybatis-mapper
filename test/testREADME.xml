@@ -9,7 +9,8 @@
     FROM
       fruits 
     WHERE
-      category = 'apple'
+      category = 'apple' and
+      <![CDATA[ price < 500 ]]>
   </select>
   
   <select id="testParameters">
