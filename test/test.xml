@@ -198,7 +198,7 @@
   </select>
   
   <select id="testBind">
-    <bind name="likeName" value="'%'+name+'%'"/>
+    <bind name="likeName" value="'%'+data.name+'%'"/>
     SELECT
       name,
       category,
@@ -206,6 +206,9 @@
     FROM
       fruits 
     WHERE
-      name like #{likeName}  
+      name like #{likeName}
+      <if test="data.name != null and data.name !=''">
+        OR name = #{data.name}
+      </if>
   </select>
 </mapper>

@@ -167,7 +167,9 @@ describe("Query tests with parameters", function(){
   
   it("13) test <bind>", function(done){
     var param = {
-        name : 'Mc',
+        data : {
+          name : 'Mc',
+        }
     }
     
     var query = mybatisMapper.getStatement('fruit', 'testBind', param);
