@@ -83,7 +83,7 @@
         <when test="name != null">
           AND name = #{name}
         </when>
-        <when test="category == 'banana">
+        <when test="category == 'banana'">
           AND category = #{category}
           <if test="price != null and price !=''">
             AND price = ${price}          
