@@ -62,8 +62,8 @@ replaceCdata = function(rawText) {
   
   if (matches != null && matches.length > 0) {
     for (var z = 0; z < matches.length; z++) {
-      var cdataRegex = new RegExp('(<!\\[CDATA\\[)([\\s\\S]*?)(\\]\\]>)', 'g');
-      var m = cdataRegex.exec(matches[z]);
+      var regex = new RegExp('(<!\\[CDATA\\[)([\\s\\S]*?)(\\]\\]>)', 'g');
+      var m = regex.exec(matches[z]);
 
       var cdataText = m[2];
       cdataText = cdataText.replace(/\&/g,'&amp;');

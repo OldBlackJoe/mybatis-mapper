@@ -164,4 +164,15 @@ describe("Query tests with parameters", function(){
     
     done();
   });
+  
+  it("13) test <bind>", function(done){
+    var param = {
+        name : 'Mc',
+    }
+    
+    var query = mybatisMapper.getStatement('fruit', 'testBind', param);
+    console.log(query);
+    
+    done();
+  });
 });

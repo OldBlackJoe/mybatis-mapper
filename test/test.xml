@@ -196,4 +196,16 @@
       <![CDATA[ price < 500 AND ]]>
       name = <![CDATA[ "&It is CDATA test><"  ]]>
   </select>
+  
+  <select id="testBind">
+    <bind name="likeName" value="'%'+name+'%'"/>
+    SELECT
+      name,
+      category,
+      price
+    FROM
+      fruits 
+    WHERE
+      name like #{likeName}  
+  </select>
 </mapper>
