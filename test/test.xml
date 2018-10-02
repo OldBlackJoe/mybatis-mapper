@@ -211,4 +211,19 @@
         OR name = #{data.name}
       </if>
   </select>
+  
+  <update id="testSet">
+    UPDATE
+      fruits
+    <set>
+      <if test="category != null and category !=''">
+        category = #{category},
+      </if>
+      <if test="price != null and price !=''">
+        price = ${price},    
+      </if>
+    </set>
+    WHERE
+      name = #{name}
+  </update>
 </mapper>

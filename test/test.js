@@ -177,4 +177,17 @@ describe("Query tests with parameters", function(){
     
     done();
   });
+  
+  it("14) test set", function(done){
+    var param = {
+        name : 'Fuji',
+        category : 'apple',
+        price : 300          
+    }
+    
+    var query = mybatisMapper.getStatement('fruit', 'testSet', param);
+    console.log(query);
+    
+    done();
+  });
 });
