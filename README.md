@@ -7,7 +7,6 @@ __Table of contents__
 
  - [Installation](#installation)
  - [Usage](#usage)
- - [Future Goal](#future-goal)
  - [Change Log](#change-log)
 
 ## Installation ##
@@ -124,7 +123,7 @@ SELECT
   category,
   price
 FROM
-  fruits 
+  fruits
 WHERE
   category = 'apple'
   AND price > 100
@@ -185,7 +184,7 @@ SELECT
 FROM
   fruits
 WHERE
-  1=1
+  1 = 1
   AND category = 'apple'
   AND price = 500
   AND name = 'Fuji'
@@ -233,8 +232,9 @@ SELECT
   price
 FROM
   fruits
-WHERE  category = 'apple'
-    OR price = 200
+WHERE
+  category = 'apple'
+  OR price = 200
 ```
 
 ### 5) &lt;where&gt; element ###
@@ -253,7 +253,9 @@ WHERE  category = 'apple'
       fruits 
     <where>
         AND category = 'apple'
-        OR price = 200
+        <if test="price != null and price !=''">
+          AND price = ${price}
+        </if>
         AND
     </where>
   </select>
@@ -280,13 +282,10 @@ SELECT
   price
 FROM
   fruits
-WHERE  category = 'apple'
-    OR price = 200
+WHERE
+  category = 'apple'
+  AND price = 500
 ```
-
-
-
-
 
 ### 6) &lt;choose&gt; &lt;when&gt; &lt;otherwise&gt; element ###
 
@@ -344,7 +343,8 @@ SELECT
   price
 FROM
   fruits
-WHERE  category = 'banana'
+WHERE
+  category = 'banana'
   AND price = 300
 ```
 
@@ -395,11 +395,10 @@ SELECT
 FROM
   fruits
 WHERE
-  category = 'apple' AND
-  (
+  category = 'apple'
+  AND (
     name = 'Jonathan'
-  OR
-    name = 'Fuji'
+    OR name = 'Fuji'
   )
 ```
 
@@ -455,32 +454,33 @@ console.log(query);
 #### result SQL ####
 ```sql
 INSERT INTO
-  fruits
-(
-  name,
-  category,
-  price
-)
+  fruits (
+    name,
+    category,
+    price
+  )
 VALUES
-(
-  "Jonathan",
-  "apple",
-  100
-)
-,
-(
-  "Mcintosh",
-  "apple",
-  500
-)
+  (
+    'Jonathan',
+    'apple',
+    100
+  ),
+  (
+    'Mcintosh',
+    'apple',
+    500
+  )
 ```
-
-## Future Goal ##
- - Support additional Dynamic SQL elements like &lt;set&gt;, &lt;bind&gt;
- - Detailed Error Handling.
 
 
 ## Change Log ##
+
+### 0.4.0 ###
+
+* Support &lt;set&gt; element.
+* Support &lt;bind&gt; element.
+* SQL formatting using sql-formatter. 
+* Bug fix
 
 ### 0.3.0 ###
 
