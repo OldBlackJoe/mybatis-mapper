@@ -7,7 +7,6 @@ __Table of contents__
 
  - [Installation](#installation)
  - [Usage](#usage)
- - [Future Goal](#future-goal)
  - [Change Log](#change-log)
 
 ## Installation ##
@@ -475,12 +474,15 @@ VALUES
 )
 ```
 
-## Future Goal ##
- - Support additional Dynamic SQL elements like &lt;set&gt;, &lt;bind&gt;
- - Detailed Error Handling.
-
 
 ## Change Log ##
+
+### 0.4.0 ###
+
+* Support &lt;set&gt; element.
+* Support &lt;bind&gt; element.
+* SQL formatting using sql-formatter. 
+* Bug fix
 
 ### 0.3.0 ###
 
