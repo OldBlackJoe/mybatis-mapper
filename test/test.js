@@ -190,4 +190,15 @@ describe("Query tests with parameters", function(){
     
     done();
   });
+  
+  it("15) sql-formatter test", function(done){
+    var param = {
+        category : 'apple'
+    }
+    
+    var query = mybatisMapper.getStatement('fruit', 'testStringParameter', param, {language: 'n1ql', indent: '    '});
+    console.log(query);
+    
+    done();
+  });
 });

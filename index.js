@@ -1,7 +1,7 @@
 var fs = require('fs');
 var HTML = require('html-parse-stringify2');
+var sqlFormatter = require("sql-formatter");
 var convert = require('./lib/convert');
-
 var myBatisMapper = {};
 
 function MybatisMapper() {
@@ -78,7 +78,7 @@ replaceCdata = function(rawText) {
   return rawText;
 }
 
-MybatisMapper.prototype.getStatement = function(namespace, sql, param) {
+MybatisMapper.prototype.getStatement = function(namespace, sql, param, format) {
   var statement = '';
   
   // Parameter Check
@@ -86,14 +86,14 @@ MybatisMapper.prototype.getStatement = function(namespace, sql, param) {
   if (myBatisMapper[namespace] == undefined) throw new Error('Namespace [' + namespace + '] not exists.');
   if (sql == null) throw new Error('SQL ID should not be null.');
   if (myBatisMapper[namespace][sql] == undefined) throw new Error('SQL ID [' + sql + '] not exists');
-
+  
   try{
     for (var i = 0, children; children = myBatisMapper[namespace][sql][i]; i++) {
       // Convert SQL statement recursively
       statement += convert.convertChildren(children, param);
     }
-  
-    statement = convert.convertAfterworks(statement);
+    
+    statement = sqlFormatter.format(convert.convertAfterworks(statement), format);
   } catch (err) {
     throw err
   }
