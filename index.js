@@ -92,8 +92,8 @@ MybatisMapper.prototype.getStatement = function(namespace, sql, param, format) {
       // Convert SQL statement recursively
       statement += convert.convertChildren(children, param);
     }
-    
-    statement = sqlFormatter.format(convert.convertAfterworks(statement), format);
+
+    statement = sqlFormatter.format(statement, format);
   } catch (err) {
     throw err
   }
