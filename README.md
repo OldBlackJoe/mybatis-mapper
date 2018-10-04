@@ -579,7 +579,7 @@ WHERE
 
 * Support &lt;set&gt; element.
 * Support &lt;bind&gt; element.
-* SQL formatting using sql-formatter. 
+* SQL formatting using [sql-formatter](https://www.npmjs.com/package/sql-formatter). 
 * Bug fix
 
 ### 0.3.0 ###
@@ -589,7 +589,7 @@ WHERE
 
 ### 0.2.0 ###
 
-* Change XML parsing library xml2js to html-parse-stringify2.
+* Change XML parsing library xml2js to [html-parse-stringify2](https://www.npmjs.com/package/html-parse-stringify2).
 * Dynamic SQL elements can use repeatedly. for example, &lt;if&gt;&lt;if&gt;&lt;/if&gt;&lt;/if&gt; 
 * Support &lt;choose&gt; &lt;when&gt; &lt;otherwise&gt; element.
 * Support &lt;trim&gt; element.
