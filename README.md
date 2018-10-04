@@ -1,4 +1,4 @@
-## mybatis-mapper ##
+# mybatis-mapper #
 
 mybatis-mapper can generate SQL statements from the MyBatis3 Mapper XML file in node.js. <br>
 You can also use Dynamic SQL elements, for example, &lt;if&gt;, &lt;where&gt;, &lt;foreach&gt;.
@@ -70,7 +70,7 @@ var param = {
 }
 
 // Get SQL Statement
-var query = mybatisMapper.getStatement('fruit', 'testBasic', param);
+var query = mybatisMapper.getStatement('fruit', 'testBasic', param, {language: 'sql', indent: '  '});
 
 // Do it!
 connection.query(query, function(err, results, fields) {
@@ -79,8 +79,15 @@ connection.query(query, function(err, results, fields) {
 });
 ```
 
- - createMapper( [XML Files] ) : This method takes Array of XML files as a arguments. <br> Reads and parses the specified xml file to prepare the SQL statements.
- - getStatement(Namespace, SqlID, Parameters) : This method takes Namespace, SQL ID, and Parameters as a arguments. <br> Create SQL statement from XML using Parameters and return it. <br> You can use this SQL string for Node.js MySQL Clients like mysql2.
+##### createMapper( [XML Files] ) #####
+ - This method takes Array of XML files as a arguments.
+ - Reads and parses the specified xml file to prepare the SQL statements.
+
+##### getStatement(Namespace, SqlID, Parameters, format) #####
+ - This method takes Namespace, SQL ID, and Parameters as a arguments.
+ - Create SQL statement from XML using Parameters and return it. 
+ - You can use this SQL string for Node.js MySQL Clients like mysql2. 
+ - "format" argument is Optional, it can set the format of the SQL language and indent. <br> For more information, see https://www.npmjs.com/package/sql-formatter
 
 ### 2) Parameters ( #{...}, ${...} ) ###
 
@@ -521,7 +528,6 @@ VALUES
   )
 ```
 
-
 ### 10) &lt;bind&gt; element ###
 
 #### fruits.xml ####
@@ -566,7 +572,6 @@ FROM
 WHERE
   name like '%Mc%'
 ```
-
 
 ## Change Log ##
 
