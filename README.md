@@ -43,7 +43,7 @@ First, prepare XML file(s) written in MyBatis3 syntax like below. <br>
 ```
  - The XML file must have one 'mapper' element, which must have the 'namespace' attribute.
  - mybatis-mapper recognizes and parses the 'select', 'insert', 'update', and 'delete' elements in the 'mapper' element as SQL statements.
- - You can use CDATA section in xml if you want to use <, &, ".
+ - You can use CDATA section in xml for well-formed XML.
  - other attributes are ignored.
  
 Second, writing Node.js codes. <br>
