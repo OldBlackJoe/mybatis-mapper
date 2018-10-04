@@ -287,6 +287,55 @@ WHERE
   AND price = 500
 ```
 
+### 6) &lt;set&gt; element ###
+
+#### fruits.xml ####
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fruit">  
+  <update id="testSet">
+    UPDATE
+      fruits
+    <set>
+      <if test="category != null and category !=''">
+        category = #{category},
+      </if>
+      <if test="price != null and price !=''">
+        price = ${price},    
+      </if>
+    </set>
+    WHERE
+      name = #{name}
+  </update>
+</mapper>
+```
+
+#### fruits.js ####
+```javascript
+var mybatisMapper = require('../index');
+mybatisMapper.createMapper([ './fruits.xml' ]);
+var param = {
+    name : 'Fuji',
+    category : 'apple',
+    price : 300          
+}
+
+var query = mybatisMapper.getStatement('fruit', 'testSet', param);
+console.log(query);
+```
+
+#### result SQL ####
+```sql
+UPDATE
+  fruits
+SET
+  category = 'apple',
+  price = 300
+WHERE
+  name = 'Fuji'
+```
+
 ### 6) &lt;choose&gt; &lt;when&gt; &lt;otherwise&gt; element ###
 
 #### fruits.xml ####
@@ -470,6 +519,52 @@ VALUES
     'apple',
     500
   )
+```
+
+
+### 10) &lt;bind&gt; element ###
+
+#### fruits.xml ####
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fruit">  
+  <select id="testBind">
+    <bind name="likeName" value="'%' + name + '%'"/>
+      SELECT
+        name,
+        category,
+        price
+      FROM
+        fruits 
+      WHERE
+        name like #{likeName}
+  </select>
+</mapper>
+```
+
+#### fruits.js ####
+```javascript
+var mybatisMapper = require('../index');
+mybatisMapper.createMapper([ './fruits.xml' ]);
+var param = {
+  name : 'Mc'
+}
+
+var query = mybatisMapper.getStatement('fruit', 'testBind', param);
+console.log(query);
+```
+
+#### result SQL ####
+```sql
+SELECT
+  name,
+  category,
+  price
+FROM
+  fruits
+WHERE
+  name like '%Mc%'
 ```
 
 
