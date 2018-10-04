@@ -60,7 +60,20 @@ describe("Query tests with parameters", function() {
     done();
   });
 
-  it("6) <choose> <when> <otherwise> elements", function(done){
+  it("6) <set> element", function(done){
+    var param = {
+        name : 'Fuji',
+        category : 'apple',
+        price : 300          
+    }
+    
+    var query = mybatisMapper.getStatement('fruit', 'testSet', param);
+    console.log(query);
+    
+    done();
+  });
+  
+  it("7) <choose> <when> <otherwise> elements", function(done){
     var param = {
         name : null,
         category : 'banana',
@@ -73,7 +86,7 @@ describe("Query tests with parameters", function() {
     done();
   });
   
-  it("7) <foreach> element - Basic", function(done){
+  it("8) <foreach> element - Basic", function(done){
     var param = {
         apples : [ 'Jonathan', 'Mcintosh', 'Fuji' ]        
     }
@@ -84,7 +97,7 @@ describe("Query tests with parameters", function() {
     done();
   });
   
-  it("8) <foreach> element - Advanced", function(done){
+  it("9) <foreach> element - Advanced", function(done){
     var param = {
         fruits : [
           {
@@ -101,6 +114,17 @@ describe("Query tests with parameters", function() {
       }
       var query = mybatisMapper.getStatement('fruit', 'testInsertMulti', param);
       console.log(query);
+    
+    done();
+  });
+  
+  it("10) test <bind>", function(done){
+    var param = {
+      name : 'Mc'
+    }
+    
+    var query = mybatisMapper.getStatement('fruit', 'testBind', param);
+    console.log(query);
     
     done();
   });

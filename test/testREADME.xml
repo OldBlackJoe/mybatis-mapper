@@ -75,6 +75,21 @@
     </where>
   </select>
 
+  <update id="testSet">
+    UPDATE
+      fruits
+    <set>
+      <if test="category != null and category !=''">
+        category = #{category},
+      </if>
+      <if test="price != null and price !=''">
+        price = ${price},    
+      </if>
+    </set>
+    WHERE
+      name = #{name}
+  </update>
+  
   <select id="testChoose">
     SELECT
       name,
@@ -134,4 +149,16 @@
     )
     </foreach>
   </insert>
+  
+  <select id="testBind">
+    <bind name="likeName" value="'%' + name + '%'"/>
+      SELECT
+        name,
+        category,
+        price
+      FROM
+        fruits 
+      WHERE
+        name like #{likeName}
+  </select>
 </mapper>
