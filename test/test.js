@@ -201,4 +201,15 @@ describe("Query tests with parameters", function(){
     
     done();
   });
+  
+  it("16) test include", function(done){
+    var param = {
+        category : 'apple'
+    }
+    
+    var query = mybatisMapper.getStatement('fruit', 'testInclude', param);
+    console.log(query);
+    
+    done();
+  });
 });
