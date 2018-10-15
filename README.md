@@ -70,7 +70,7 @@ var param = {
 }
 
 // Get SQL Statement
-var query = mybatisMapper.getStatement('fruit', 'testBasic', param, {language: 'sql', indent: '  '});
+var query = mybatisMapper.getStatement('fruit', 'testBasic', param);
 
 // Do it!
 connection.query(query, function(err, results, fields) {
@@ -112,14 +112,14 @@ connection.query(query, function(err, results, fields) {
 
 #### fruits.js ####
 ```javascript
-var mybatisMapper = require('../index');
+var mybatisMapper = require('mybatis-mapper');
 mybatisMapper.createMapper([ './fruits.xml' ]);
 var param = {
     category : 'apple',
     price : 100
 }
     
-var query = mybatisMapper.getStatement('fruit', 'testParameters', param);
+var query = mybatisMapper.getStatement('fruit', 'testParameters', param, {language: 'sql', indent: '  '});
 console.log(query);
 ```
 
@@ -171,14 +171,14 @@ WHERE
 
 #### fruits.js ####
 ```javascript
-var mybatisMapper = require('../index');
+var mybatisMapper = require('mybatis-mapper');
 mybatisMapper.createMapper([ './fruits.xml' ]);
 var param = {
     category : 'apple',
     price : 500
 }
 
-var query = mybatisMapper.getStatement('fruit', 'testIf', param);
+var query = mybatisMapper.getStatement('fruit', 'testIf', param, {language: 'sql', indent: '  '});
 console.log(query);
 ```
 
@@ -223,11 +223,11 @@ WHERE
 
 #### fruits.js ####
 ```javascript
-var mybatisMapper = require('../index');
+var mybatisMapper = require('mybatis-mapper');
 mybatisMapper.createMapper([ './fruits.xml' ]);
 var param = null;
 
-var query = mybatisMapper.getStatement('fruit', 'testTrim', param);
+var query = mybatisMapper.getStatement('fruit', 'testTrim', param, {language: 'sql', indent: '  '});
 console.log(query);
 ```
 
@@ -271,13 +271,13 @@ WHERE
 
 #### fruits.js ####
 ```javascript
-var mybatisMapper = require('../index');
+var mybatisMapper = require('mybatis-mapper');
 mybatisMapper.createMapper([ './fruits.xml' ]);
 var param = {
     price : 500
 }
 
-var query = mybatisMapper.getStatement('fruit', 'testWhere', param);
+var query = mybatisMapper.getStatement('fruit', 'testWhere', param, {language: 'sql', indent: '  '});
 console.log(query);
 ```
 
@@ -320,7 +320,7 @@ WHERE
 
 #### fruits.js ####
 ```javascript
-var mybatisMapper = require('../index');
+var mybatisMapper = require('mybatis-mapper');
 mybatisMapper.createMapper([ './fruits.xml' ]);
 var param = {
     name : 'Fuji',
@@ -328,7 +328,7 @@ var param = {
     price : 300          
 }
 
-var query = mybatisMapper.getStatement('fruit', 'testSet', param);
+var query = mybatisMapper.getStatement('fruit', 'testSet', param, {language: 'sql', indent: '  '});
 console.log(query);
 ```
 
@@ -379,7 +379,7 @@ WHERE
 
 #### fruits.js ####
 ```javascript
-var mybatisMapper = require('../index');
+var mybatisMapper = require('mybatis-mapper');
 mybatisMapper.createMapper([ './fruits.xml' ]);
 var param = {
     name : null,
@@ -387,7 +387,7 @@ var param = {
     price : 300
 }
 
-var query = mybatisMapper.getStatement('fruit', 'testChoose', param);
+var query = mybatisMapper.getStatement('fruit', 'testChoose', param, {language: 'sql', indent: '  '});
 console.log(query);
 ```
 
@@ -432,13 +432,13 @@ WHERE
 
 #### fruits.js ####
 ```javascript
-var mybatisMapper = require('../index');
+var mybatisMapper = require('mybatis-mapper');
 mybatisMapper.createMapper([ './fruits.xml' ]);
 var param = {
     apples : [ 'Jonathan', 'Mcintosh', 'Fuji' ]        
 }
 
-var query = mybatisMapper.getStatement('fruit', 'testForeach', param);
+var query = mybatisMapper.getStatement('fruit', 'testForeach', param, {language: 'sql', indent: '  '});
 console.log(query);
 ```
 
@@ -487,7 +487,7 @@ WHERE
 
 #### fruits.js ####
 ```javascript
-var mybatisMapper = require('../index');
+var mybatisMapper = require('mybatis-mapper');
 mybatisMapper.createMapper([ './fruits.xml' ]);
 var param = {
   fruits : [
@@ -503,7 +503,7 @@ var param = {
     }
   ]
 }
-var query = mybatisMapper.getStatement('fruit', 'testInsertMulti', param);
+var query = mybatisMapper.getStatement('fruit', 'testInsertMulti', param, {language: 'sql', indent: '  '});
 console.log(query);
 ```
 
@@ -551,13 +551,13 @@ VALUES
 
 #### fruits.js ####
 ```javascript
-var mybatisMapper = require('../index');
+var mybatisMapper = require('mybatis-mapper');
 mybatisMapper.createMapper([ './fruits.xml' ]);
 var param = {
   name : 'Mc'
 }
 
-var query = mybatisMapper.getStatement('fruit', 'testBind', param);
+var query = mybatisMapper.getStatement('fruit', 'testBind', param, {language: 'sql', indent: '  '});
 console.log(query);
 ```
 
@@ -610,13 +610,13 @@ WHERE
 
 #### fruits.js ####
 ```javascript
-var mybatisMapper = require('../index');
+var mybatisMapper = require('mybatis-mapper');
 mybatisMapper.createMapper([ './fruits.xml' ]);
 var param = {
     category : 'apple'
 }
 
-var query = mybatisMapper.getStatement('fruit', 'testInclude', param);
+var query = mybatisMapper.getStatement('fruit', 'testInclude', param, {language: 'sql', indent: '  '});
 console.log(query);
 ```
 
