@@ -573,7 +573,72 @@ WHERE
   name like '%Mc%'
 ```
 
+### 10) &lt;include&gt; element ###
+
+#### fruits.xml ####
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fruit">  
+  <sql id="sometable">
+    fruits
+  </sql>
+  
+  <sql id="somewhere">
+    WHERE
+      category = #{category}
+  </sql>
+  
+  <sql id="someinclude">
+    FROM
+      <include refid="${include_target}"/>
+    <include refid="somewhere"/>
+  </sql>
+  
+  <select id="testInclude">
+    SELECT
+      name,
+      category,
+      price
+    <include refid="someinclude">
+      <property name="prefix" value="Some"/>
+      <property name="include_target" value="sometable"/>
+    </include>
+  </select>
+</mapper>
+```
+
+#### fruits.js ####
+```javascript
+var mybatisMapper = require('../index');
+mybatisMapper.createMapper([ './fruits.xml' ]);
+var param = {
+    category : 'apple'
+}
+
+var query = mybatisMapper.getStatement('fruit', 'testInclude', param);
+console.log(query);
+```
+
+#### result SQL ####
+```sql
+SELECT
+  name,
+  category,
+  price
+FROM
+  fruits
+WHERE
+  category = 'apple'
+```
+
 ## Change Log ##
+
+### 0.5.0 ###
+
+* Support &lt;include&gt; element.
+* Do not formatting SQL when 'format' parameter is null
+* Bug fix
 
 ### 0.4.0 ###
 
