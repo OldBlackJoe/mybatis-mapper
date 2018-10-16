@@ -573,7 +573,7 @@ WHERE
   name like '%Mc%'
 ```
 
-### 10) &lt;include&gt; element ###
+### 11) &lt;include&gt; element ###
 
 #### fruits.xml ####
 ```xml
