@@ -70,7 +70,8 @@ var param = {
 }
 
 // Get SQL Statement
-var query = mybatisMapper.getStatement('fruit', 'testBasic', param);
+var format = {language: 'sql', indent: '  '};
+var query = mybatisMapper.getStatement('fruit', 'testBasic', param, format);
 
 // Do it!
 connection.query(query, function(err, results, fields) {
@@ -87,7 +88,7 @@ connection.query(query, function(err, results, fields) {
  - This method takes Namespace, SQL ID, and Parameters as a arguments.
  - Create SQL statement from XML using Parameters and return it. 
  - You can use this SQL string for Node.js MySQL Clients like mysql2. 
- - "format" argument is Optional, it can set the format of the SQL language and indent. <br> For more information, see https://www.npmjs.com/package/sql-formatter
+ - "format" argument is Optional, it can set the format of the SQL language and indent.<br> For more information, see https://www.npmjs.com/package/sql-formatter
 
 ### 2) Parameters ( #{...}, ${...} ) ###
 
