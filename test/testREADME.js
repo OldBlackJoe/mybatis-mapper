@@ -10,7 +10,8 @@ describe("Unit Tests in README.md", function() {
     }
 
     // Get SQL Statement
-    var query = mybatisMapper.getStatement('fruit', 'testBasic', param);
+    var format = {language: 'sql', indent: '  '};
+    var query = mybatisMapper.getStatement('fruit', 'testBasic', param, format);
     console.log(query);
 
     done();
