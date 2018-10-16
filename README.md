@@ -16,7 +16,15 @@ npm install --save mybatis-mapper
 ```
 
 ## Usage ##
-You can see description of Dynamic SQL of MyBatis3 in the link below. <br>
+mybatis-mapper supports all of dynamic SQL elements.<br>
+* &lt;if&gt;
+* &lt;choose&gt;, &lt;when&gt;, &lt;otherwise&gt;
+* &lt;trim&gt;, &lt;where&gt;, &lt;set&gt;
+* &lt;foreach&gt;
+* &lt;bind&gt;
+* &lt;include&gt;
+
+You can see description of Dynamic SQL of MyBatis3 in the link below.<br>
 http://www.mybatis.org/mybatis-3/dynamic-sql.html
 
 ### 1) Basic ###
