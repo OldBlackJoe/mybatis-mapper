@@ -161,4 +161,30 @@
       WHERE
         name like #{likeName}
   </select>
+  
+  <sql id="sometable">
+    fruits
+  </sql>
+  
+  <sql id="somewhere">
+    WHERE
+      category = #{category}
+  </sql>
+  
+  <sql id="someinclude">
+    FROM
+      <include refid="${include_target}"/>
+    <include refid="somewhere"/>
+  </sql>
+  
+  <select id="testInclude">
+    SELECT
+      name,
+      category,
+      price
+    <include refid="someinclude">
+      <property name="prefix" value="Some"/>
+      <property name="include_target" value="sometable"/>
+    </include>
+  </select>
 </mapper>

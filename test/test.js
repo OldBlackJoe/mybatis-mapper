@@ -1,7 +1,7 @@
 var mybatisMapper = require('../index');
 mybatisMapper.createMapper([ './test.xml' ]);
 
-describe("Query tests with parameters", function(){
+describe("Unit Tests for Mybatis-mapper", function(){
   it("1) #{...} parameters", function(done){
     var param = {
         category : 'apple'
@@ -207,7 +207,7 @@ describe("Query tests with parameters", function(){
         category : 'apple'
     }
     
-    var query = mybatisMapper.getStatement('fruit', 'testInclude', param);
+    var query = mybatisMapper.getStatement('fruit', 'testInclude', param, null);
     console.log(query);
     
     done();

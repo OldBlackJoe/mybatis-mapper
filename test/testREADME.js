@@ -1,7 +1,7 @@
 var mybatisMapper = require('../index');
 mybatisMapper.createMapper([ './testREADME.xml' ]);
 
-describe("Query tests with parameters", function() {
+describe("Unit Tests in README.md", function() {
   it("1) Basic", function(done) {
     // SQL Parameters
     var param = {
@@ -22,7 +22,7 @@ describe("Query tests with parameters", function() {
       price : 100
     }
 
-    var query = mybatisMapper.getStatement('fruit', 'testParameters', param);
+    var query = mybatisMapper.getStatement('fruit', 'testParameters', param, {language: 'sql', indent: '  '});
     console.log(query);
 
     done();
@@ -34,7 +34,7 @@ describe("Query tests with parameters", function() {
         price : 500
     }
 
-    var query = mybatisMapper.getStatement('fruit', 'testIf', param);
+    var query = mybatisMapper.getStatement('fruit', 'testIf', param, {language: 'sql', indent: '  '});
     console.log(query);
     
     done();
@@ -43,7 +43,7 @@ describe("Query tests with parameters", function() {
   it("4) <trim> element", function(done){
     var param = null;
     
-    var query = mybatisMapper.getStatement('fruit', 'testTrim', param);
+    var query = mybatisMapper.getStatement('fruit', 'testTrim', param, {language: 'sql', indent: '  '});
     console.log(query);
     
     done();
@@ -54,7 +54,7 @@ describe("Query tests with parameters", function() {
         price : 500
     }
 
-    var query = mybatisMapper.getStatement('fruit', 'testWhere', param);
+    var query = mybatisMapper.getStatement('fruit', 'testWhere', param, {language: 'sql', indent: '  '});
     console.log(query);
     
     done();
@@ -67,7 +67,7 @@ describe("Query tests with parameters", function() {
         price : 300          
     }
     
-    var query = mybatisMapper.getStatement('fruit', 'testSet', param);
+    var query = mybatisMapper.getStatement('fruit', 'testSet', param, {language: 'sql', indent: '  '});
     console.log(query);
     
     done();
@@ -80,7 +80,7 @@ describe("Query tests with parameters", function() {
         price : 300
     }
     
-    var query = mybatisMapper.getStatement('fruit', 'testChoose', param);
+    var query = mybatisMapper.getStatement('fruit', 'testChoose', param, {language: 'sql', indent: '  '});
     console.log(query);
     
     done();
@@ -91,7 +91,7 @@ describe("Query tests with parameters", function() {
         apples : [ 'Jonathan', 'Mcintosh', 'Fuji' ]        
     }
 
-    var query = mybatisMapper.getStatement('fruit', 'testForeach', param);
+    var query = mybatisMapper.getStatement('fruit', 'testForeach', param, {language: 'sql', indent: '  '});
     console.log(query);
     
     done();
@@ -112,7 +112,7 @@ describe("Query tests with parameters", function() {
           }
         ]
       }
-      var query = mybatisMapper.getStatement('fruit', 'testInsertMulti', param);
+      var query = mybatisMapper.getStatement('fruit', 'testInsertMulti', param, {language: 'sql', indent: '  '});
       console.log(query);
     
     done();
@@ -123,7 +123,18 @@ describe("Query tests with parameters", function() {
       name : 'Mc'
     }
     
-    var query = mybatisMapper.getStatement('fruit', 'testBind', param);
+    var query = mybatisMapper.getStatement('fruit', 'testBind', param, {language: 'sql', indent: '  '});
+    console.log(query);
+    
+    done();
+  });
+  
+  it("11) test <include>", function(done){
+    var param = {
+        category : 'apple'
+    }
+    
+    var query = mybatisMapper.getStatement('fruit', 'testInclude', param, {language: 'sql', indent: '  '});
     console.log(query);
     
     done();
