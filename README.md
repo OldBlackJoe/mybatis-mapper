@@ -643,6 +643,10 @@ WHERE
 
 ## Change Log ##
 
+### 0.5.1 ###
+
+* Hot fix for &lt;foreach&gt; element.
+
 ### 0.5.0 ###
 
 * Support &lt;include&gt; element.
