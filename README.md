@@ -643,6 +643,10 @@ WHERE
 
 ## Change Log ##
 
+### 0.5.2 ###
+
+* Error Handling
+
 ### 0.5.1 ###
 
 * Hot fix for &lt;foreach&gt; element.
