@@ -100,7 +100,7 @@ MybatisMapper.prototype.getStatement = function(namespace, sql, param, format) {
       var checkParam = statement.match(regexString);
       
       if (checkParam != null && checkParam.length > 0) {
-        throw new Error("Parameter " + checkParam.join(",") + " is not defined.");
+        throw new Error("Parameter " + checkParam.join(",") + " is not converted.");
       }
     }
 
