@@ -643,6 +643,10 @@ WHERE
 
 ## Change Log ##
 
+### 0.5.3 ###
+
+* Hot fix for &lt;include&gt; element.
+
 ### 0.5.2 ###
 
 * Error Handling
