@@ -643,6 +643,10 @@ WHERE
 
 ## Change Log ##
 
+### 0.6.0 ###
+
+* Added typings for use with TypeScript.
+
 ### 0.5.3 ###
 
 * Hot fix for &lt;include&gt; element.
