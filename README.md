@@ -643,6 +643,10 @@ WHERE
 
 ## Change Log ##
 
+### 0.6.1 ###
+
+* Hot fix for &lt;trim&gt; &lt;where&gt; elements.
+
 ### 0.6.0 ###
 
 * Added typings for use with TypeScript.
