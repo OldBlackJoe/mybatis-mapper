@@ -645,7 +645,8 @@ WHERE
 
 ### 0.6.1 ###
 
-* Hot fix for &lt;trim&gt; &lt;where&gt; elements.
+* Improved parameter conversion logic.
+* Bug fix for &lt;trim&gt; &lt;where&gt; elements.
 
 ### 0.6.0 ###
 

@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. 
 
+# 0.6.1
+
+* Improved parameter conversion logic.
+* Bug fix for &lt;trim&gt; &lt;where&gt; elements.
+
 # 0.6.0
 
 * Added typings for use with TypeScript.
