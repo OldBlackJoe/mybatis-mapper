@@ -1,6 +1,6 @@
 {
   "name": "mybatis-mapper",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "mybatis-mapper can generate SQL statements from the MyBatis3 Mapper XML file in node.js. You can use Dynamic SQL elements",
   "author": {
     "name": "Kim KyoungDong",

@@ -643,6 +643,10 @@ WHERE
 
 ## Change Log ##
 
+### 0.6.2 ###
+
+* Hot fix for &lt;foreach&gt; element.
+
 ### 0.6.1 ###
 
 * Improved parameter conversion logic.
