@@ -226,4 +226,15 @@ describe("Unit Tests for Mybatis-mapper", function(){
       done();
     }    
   });
+  
+  it("18) <foreach> zero (0) parameter test", function(done){
+	var param = {
+	  IDs: [0, 1, 2, 3]
+	};
+    
+    var query = mybatisMapper.getStatement('fruit', 'testForeachZero', param);
+    console.log(query);
+    
+    done();
+  });
 });

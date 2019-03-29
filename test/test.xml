@@ -252,4 +252,17 @@
       <property name="include_target" value="sometable"/>
     </include>
   </select>
+  
+  <select id="testForeachZero">
+    select
+    from
+      user
+    where
+    in
+    (
+      <foreach collection="IDs" item="ID" separator=",">
+      #{ID}
+      </foreach>
+    )
+  </select>
 </mapper>
