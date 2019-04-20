@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. 
 
+# 0.6.3
+
+* Fix bug that Null parameter was not converted.
+
 # 0.6.2
 
 * Hot fix for &lt;foreach&gt; element.
