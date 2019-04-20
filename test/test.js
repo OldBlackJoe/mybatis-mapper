@@ -237,4 +237,15 @@ describe("Unit Tests for Mybatis-mapper", function(){
     
     done();
   });
+
+  it("19) test null parameters", function(done){
+    var param = {
+      category : null
+    }
+    
+    var query = mybatisMapper.getStatement('fruit', 'testNullParameter', param);
+    console.log(query);
+    
+    done();
+  });
 });

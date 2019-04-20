@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="fruit">  
-	<select id="testStringParameter">
+  <select id="testStringParameter">
     SELECT
       name,
       category,
@@ -10,7 +10,7 @@
       fruits 
     WHERE
       category = #{category}
-	</select>
+  </select>
 
   <select id="testIntegerParameter">
     SELECT
@@ -264,5 +264,20 @@
       #{ID}
       </foreach>
     )
+  </select>
+
+  <select id="testNullParameter">
+    SELECT
+      name,
+      category,
+      price
+    FROM
+      fruits 
+    <where>
+      category = #{category}
+      <if test="price != null and price !=''">
+        AND price = ${price}
+      </if>       
+    </where>
   </select>
 </mapper>
