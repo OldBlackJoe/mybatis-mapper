@@ -1,5 +1,5 @@
 var mybatisMapper = require('../index');
-mybatisMapper.createMapper([ './test.xml' ]);
+mybatisMapper.createMapper([ './test/test.xml' ]);
 
 describe("Unit Tests for Mybatis-mapper", function(){
   it("1) #{...} parameters", function(done){
