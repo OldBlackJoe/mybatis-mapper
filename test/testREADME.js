@@ -1,5 +1,5 @@
 var mybatisMapper = require('../index');
-mybatisMapper.createMapper([ './testREADME.xml' ]);
+mybatisMapper.createMapper([ './test/testREADME.xml' ]);
 
 describe("Unit Tests in README.md", function() {
   it("1) Basic", function(done) {
