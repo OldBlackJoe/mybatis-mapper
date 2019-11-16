@@ -643,6 +643,10 @@ WHERE
 
 ## Change Log ##
 
+### 0.6.4 ###
+
+* Fix JSON data type parsing (arrays/objects)
+
 ### 0.6.3 ###
 
 * Fix bug that Null parameter was not converted.

@@ -1,6 +1,10 @@
 # Change Log
 
-All notable changes to this project will be documented in this file. 
+All notable changes to this project will be documented in this file.
+
+# 0.6.4
+
+* Fix JSON data type parsing (arrays/objects)
 
 # 0.6.3
 
