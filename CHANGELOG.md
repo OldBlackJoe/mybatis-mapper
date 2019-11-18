@@ -2,10 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+# 0.6.5
+
+* Fix Unexpected end of input error
+
 # 0.6.4
 
 * Fix JSON data type parsing (arrays/objects)
-* Fix Unexpected end of input error
 
 # 0.6.3
 
