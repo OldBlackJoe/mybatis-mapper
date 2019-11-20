@@ -27,7 +27,7 @@ jobs:
 
       - run:
           name: Run tests
-          command: npm test
+          command: npm test test.js
 
       - save_cache:
           paths:
@@ -37,20 +37,6 @@ jobs:
       - persist_to_workspace:
           root: ~/repo
           paths: .
-  deploy:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: ~/repo
-      - run:
-          name: Authenticate with registry
-          command: echo "//registry.npmjs.org/:_authToken=$npm_TOKEN" > ~/repo/.npmrc
-      - run:
-          name: check registry
-          command: cat ~/repo/.npmrc
-      - run:
-          name: Publish package
-          command: npm publish
 
 workflows:
   version: 2
@@ -59,12 +45,4 @@ workflows:
       - test:
           filters:
             tags:
-              only: /^v.*/
-      - deploy:
-          requires:
-            - test
-          filters:
-            tags:
               only: /.*/
-            branches:
-              ignore: /.*/
