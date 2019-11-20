@@ -1,4 +1,5 @@
 # mybatis-mapper #
+[![CircleCI](https://circleci.com/gh/OldBlackJoe/mybatis-mapper.svg?style=svg)](https://circleci.com/gh/OldBlackJoe/mybatis-mapper)
 
 mybatis-mapper can generate SQL statements from the MyBatis3 Mapper XML file in node.js. <br>
 You can also use Dynamic SQL elements, for example, &lt;if&gt;, &lt;where&gt;, &lt;foreach&gt;.
