@@ -27,7 +27,7 @@ jobs:
 
       - run:
           name: Run tests
-          command: npm test test.js
+          command: npm test ./test/test.js
 
       - save_cache:
           paths:
