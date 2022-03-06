@@ -1,5 +1,5 @@
 var fs = require('fs');
-var HTML = require('html-parse-stringify2');
+var HTML = require('html-parse-stringify');
 var sqlFormatter = require("sql-formatter");
 var convert = require('./lib/convert');
 var myBatisMapper = {};

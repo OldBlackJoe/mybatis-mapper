@@ -644,6 +644,10 @@ WHERE
 
 ## Change Log ##
 
+### 0.6.6 ###
+
+* Update dependencies for fix issue #13
+
 ### 0.6.5 ###
 
 * Fix Unexpected end of input error

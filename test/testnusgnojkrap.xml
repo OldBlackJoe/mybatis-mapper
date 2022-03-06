@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+</mapper>
+<mapper namespace="errorexample">
+<select id="errorSql">
+SELECT VNS_IDX
+FROM
+TB_VNS_IBIZ_NUMBER
+WHERE
+VNS_NUMBER <= #{vnsNumber} and VNS_NUMBER >= #{vnsNumber} 
+</select>
+</mapper>

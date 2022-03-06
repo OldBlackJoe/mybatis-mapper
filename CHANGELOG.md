@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+# 0.6.6
+
+* Update dependencies for fix issue #13
+
 # 0.6.5
 
 * Fix Unexpected end of input error
