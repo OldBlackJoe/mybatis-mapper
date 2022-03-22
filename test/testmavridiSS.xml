@@ -1,0 +1,1 @@
+<mapper namespace="test"> <select id="statement"> SELECT * FROM TABLE t WHERE t.property > 0 <if test="name != null> AND UPPER(t.name) LIKE UPPER(#{name}) </if> </select> </mapper>
