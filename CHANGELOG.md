@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+# 0.6.8
+
+* Use escape dollar sign when using replace method
+
+# 0.6.7
+
+* Fix query with an apostrophe results in an error
+
 # 0.6.6
 
 * Update dependencies for fix issue #13
