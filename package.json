@@ -22,8 +22,11 @@
   ],
   "dependencies": {
     "html-parse-stringify": "3.0.1",
-    "sql-formatter": "4.0.2"
+    "sql-formatter": "12.2.1"
   },
   "license": "Apache-2.0",
-  "readmeFilename": "README.md"
+  "readmeFilename": "README.md",
+  "devDependencies": {
+    "mocha": "^10.2.0"
+  }
 }
