@@ -15,11 +15,11 @@ describe("Unit Tests for Issue of mavridiSS", function(){
     assert.equal(query,
 `
 SELECT
- *
+  *
 FROM
- article
+  article
 WHERE
- name = '10'
+  name = '10'
 `.trim())
     done();
   });
