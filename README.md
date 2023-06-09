@@ -644,6 +644,21 @@ WHERE
 
 ## Change Log ##
 
+### 0.7.0 ###
+
+* Escape param key for sql string
+* Add suffix feature for TRIM
+* Fix trim suffix may be empty and param may have underscore
+* Solve grave accent issue
+
+### 0.6.8 ###
+
+* Use escape dollar sign when using replace method
+
+### 0.6.7 ###
+
+* Fix query with an apostrophe results in an error
+
 ### 0.6.6 ###
 
 * Update dependencies for fix issue #13
