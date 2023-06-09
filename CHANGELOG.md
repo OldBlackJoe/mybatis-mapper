@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+# 0.7.0
+
+* Escape param key for sql string
+* Add suffix feature for TRIM
+* Fix trim suffix may be empty and param may have underscore
+* Solve grave accent issue
+
 # 0.6.8
 
 * Use escape dollar sign when using replace method
