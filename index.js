@@ -36,7 +36,9 @@ findMapper = function(children) {
 
   if (children.type == 'tag' && children.name == 'mapper') {
     // Add Mapper
-    myBatisMapper[children.attrs.namespace] = {};
+    if(!myBatisMapper[children.attrs.namespace]) {
+      myBatisMapper[children.attrs.namespace] = {};
+    }
 
     for (var j = 0, sql; sql = children.children[j]; j++) {
       if (sql['type'] == 'tag' && queryTypes.indexOf(sql['name']) > -1) {
