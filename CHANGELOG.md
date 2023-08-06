@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+# 0.7.1
+
+* create namespace if only not exists
+
 # 0.7.0
 
 * Escape param key for sql string

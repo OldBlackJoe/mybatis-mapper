@@ -644,6 +644,10 @@ WHERE
 
 ## Change Log ##
 
+### 0.7.1 ###
+
+* create namespace if only not exists
+
 ### 0.7.0 ###
 
 * Escape param key for sql string
