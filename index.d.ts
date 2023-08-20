@@ -15,7 +15,7 @@ declare namespace MybatisMapper {
   };
 
   export type Format = {
-    language?: "sql" | "db2" | "n1ql" | "pl/sql";
+    language?: "sql" | "db2" | "n1ql" | "plsql";
     indent?: string;
     params?: Params;
   };
