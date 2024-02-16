@@ -9,6 +9,7 @@ declare namespace MybatisMapper {
       | string[]
       | number
       | number[]
+      | object[]
       | boolean
       | null
       | undefined;
