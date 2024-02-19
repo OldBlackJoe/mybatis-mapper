@@ -37,7 +37,7 @@ class MyBatisSession {
         try {
             return await this.selectList(mapperId, params, model);
         } catch (error) {
-            console.error('[ERROR]:\`queryCatchAndMapTo\`', error);
+            console.error('[ERROR]:\`selectAndCatchSilently\`', error);
             return [];
         }
     }
