@@ -23,9 +23,10 @@ declare class MyBatisSession {
      * @template T
      * @param {string} mapperId - Mapper ID
      * @param {Params} params - Query parameters
+     * @param {ClassConstructor<T>} model - Model class
      * @return {Promise<T[]>}
      */
-    selectAndCatchSilently: <T>(mapperId: string, params: Params) => Promise<T[]>;
+    selectAndCatchSilently: <T>(mapperId: string, params: Params, model: ClassConstructor<T>) => Promise<T[]>;
 
     /**
      * Query a MySQL database and map the result to a single model
