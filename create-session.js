@@ -1,5 +1,5 @@
 // var mysql = require('mysql2');
-var MyBatis = require('index');
+var MyBatis = require('./index');
 var { plainToInstance } = require('class-transformer');
 
 class MyBatisSession {
