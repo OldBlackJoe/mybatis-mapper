@@ -4,7 +4,7 @@ import {Params} from "./index";
 
 declare class MyBatisSession {
     /**
-     * @param {Connection} connection - MySQL Connection object
+     * @param {Connection} connection - MySQL connection object
      * @param {string} namespace - Namespace of the mapper
      * @param {string[]} mappers - File paths to the mappers
      */
@@ -47,6 +47,18 @@ declare class MyBatisSession {
      * @return {Promise<T[]>}
      */
     selectList: <T>(mapperId: string, params: Params, model: ClassConstructor<T>) => Promise<T[]>;
+
+    /**
+     * Get the MySQL connection object
+     * @return {Connection}
+     */
+    get connection(): Connection;
+
+    /**
+     * End the MySQL connection
+     * @return {void}
+     */
+    end: () => void;
 }
 
 export = MyBatisSession;

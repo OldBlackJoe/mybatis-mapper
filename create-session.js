@@ -41,6 +41,14 @@ class MyBatisSession {
             return [];
         }
     }
+
+    get connection() {
+        return this.#connection;
+    }
+
+    end() {
+        this.#connection.end();
+    }
 }
 
 module.exports = MyBatisSession;
