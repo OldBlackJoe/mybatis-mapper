@@ -24,7 +24,7 @@ class MyBatisSession {
     }
 
     async selectFirst(mapperId, params, model) {
-        const rows = await this.select(mapperId, params, model);
+        const rows = await this.selectList(mapperId, params, model);
         return rows[0];
     }
 
