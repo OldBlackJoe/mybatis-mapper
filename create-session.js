@@ -43,4 +43,4 @@ class MyBatisSession {
     }
 }
 
-module.exports = new MyBatisSession();
+module.exports = MyBatisSession;
