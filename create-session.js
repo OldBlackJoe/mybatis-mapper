@@ -1,14 +1,15 @@
-// var mysql = require('mysql2');
 var MyBatis = require('./index');
 var { plainToInstance } = require('class-transformer');
 
 class MyBatisSession {
     #connection;
     #namespace;
+    #debugMode;
 
-    constructor(connection, namespace, mappers) {
+    constructor(connection, namespace, mappers, debugMode = false) {
         this.#connection = connection;
         this.#namespace = namespace;
+        this.#debugMode = debugMode;
         MyBatis.createMapper(mappers);
     }
 
@@ -18,12 +19,17 @@ class MyBatisSession {
             indent: '  ',
         });
 
+        if (!!this.#debugMode) {
+            console.log(`Query for namespace: ${this.#namespace} & mapperID: ${mapperId}`);
+            console.log(query);
+        }
+
         const [rows] = await this.#connection.promise().query(query);
 
         return rows;
     }
 
-    async selectFirst(mapperId, params, model) {
+    async selectOne(mapperId, params, model) {
         const rows = await this.selectList(mapperId, params, model);
         return rows[0];
     }

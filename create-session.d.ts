@@ -7,8 +7,9 @@ declare class MyBatisSession {
      * @param {Connection} connection - MySQL connection object
      * @param {string} namespace - Namespace of the mapper
      * @param {string[]} mappers - File paths to the mappers
+     * @param {boolean} debugMode - Debug mode will log the SQL query created
      */
-    constructor(connection: Connection, namespace: string, mappers: string[]);
+    constructor(connection: Connection, namespace: string, mappers: string[], debugMode: boolean);
 
     /**
      * Query a MySQL database
@@ -36,7 +37,7 @@ declare class MyBatisSession {
      * @param {ClassConstructor<T>} model - Model class
      * @return {Promise<T>}
      */
-    selectFirst: <T>(mapperId: string, params: Params, model: ClassConstructor<T>) => Promise<T | undefined>;
+    selectOne: <T>(mapperId: string, params: Params, model: ClassConstructor<T>) => Promise<T | undefined>;
 
     /**
      * Query a MySQL database and map the result to a model list
