@@ -9,7 +9,7 @@ declare class MyBatisSession {
      * @param {string[]} mappers - File paths to the mappers
      * @param {boolean} debugMode - Debug mode will log the SQL query created
      */
-    constructor(connection: Connection, namespace: string, mappers: string[], debugMode: boolean);
+    constructor(connection: Connection, namespace: string, mappers: string[], debugMode?: boolean);
 
     /**
      * Query a MySQL database
