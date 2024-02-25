@@ -31,7 +31,7 @@ MybatisMapper.prototype.createMapper = function(xmls) {
   }
 };
 
-findMapper = function(children) {
+function findMapper(children) {
   var queryTypes = [ 'sql', 'select', 'insert', 'update', 'delete' ];
 
   if (children.type == 'tag' && children.name == 'mapper') {
@@ -58,7 +58,7 @@ findMapper = function(children) {
   }
 }
 
-replaceCdata = function(rawText) {
+function replaceCdata(rawText) {
   var cdataRegex = new RegExp('(<!\\[CDATA\\[)([\\s\\S]*?)(\\]\\]>)', 'g');
   var matches = rawText.match(cdataRegex);
   
