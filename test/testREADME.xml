@@ -7,36 +7,36 @@
       category,
       price
     FROM
-      fruits 
+      fruits
     WHERE
       category = 'apple' and
       <![CDATA[ price < 500 ]]>
   </select>
-  
+
   <select id="testParameters">
     SELECT
       name,
       category,
       price
     FROM
-      fruits 
+      fruits
     WHERE
       category = #{category}
       AND price > ${price}
   </select>
-  
+
   <select id="testIf">
     SELECT
       name,
       category,
       price
     FROM
-      fruits 
+      fruits
     WHERE
       1=1
-      <if test="category != null and category !=''">
+      <if test='"Y".equalsIgnoreCase(dobFlag) and category != null and category !=""'>
         AND category = #{category}
-        
+
       </if>
       <if test="price != null and price !=''">
         AND price = ${price}
@@ -52,20 +52,20 @@
       category,
       price
     FROM
-      fruits 
+      fruits
     <trim prefix="WHERE" prefixOverrides="AND|OR">
         OR category = 'apple'
         OR price = 200
     </trim>
   </select>
-  
+
   <select id="testWhere">
     SELECT
       name,
       category,
       price
     FROM
-      fruits 
+      fruits
     <where>
         AND category = 'apple'
         <if test="price != null and price !=''">
@@ -83,20 +83,20 @@
         category = #{category},
       </if>
       <if test="price != null and price !=''">
-        price = ${price},    
+        price = ${price},
       </if>
     </set>
     WHERE
       name = #{name}
   </update>
-  
+
   <select id="testChoose">
     SELECT
       name,
       category,
       price
     FROM
-      fruits 
+      fruits
     <where>
       <choose>
         <when test="name != null">
@@ -105,7 +105,7 @@
         <when test="category == 'banana'">
           AND category = #{category}
           <if test="price != null and price !=''">
-            AND price = ${price}          
+            AND price = ${price}
           </if>
         </when>
         <otherwise>
@@ -114,20 +114,20 @@
       </choose>
     </where>
   </select>
-  
+
   <select id="testForeach">
     SELECT
       name,
       category,
       price
     FROM
-      fruits 
+      fruits
     <where>
       category = 'apple' AND
       <foreach collection="apples" item="name"  open="(" close=")" separator="OR">
         <if test="name == 'Jonathan' or name == 'Fuji'">
           name = #{name}
-        </if>        
+        </if>
       </foreach>
     </where>
   </select>
@@ -138,7 +138,7 @@
     (
       name,
       category,
-      price      
+      price
     )
     VALUES
     <foreach collection="fruits" item="fruit"  separator=",">
@@ -149,7 +149,7 @@
     )
     </foreach>
   </insert>
-  
+
   <select id="testBind">
     <bind name="likeName" value="'%' + name + '%'"/>
       SELECT
@@ -157,26 +157,26 @@
         category,
         price
       FROM
-        fruits 
+        fruits
       WHERE
         name like #{likeName}
   </select>
-  
+
   <sql id="sometable">
     fruits
   </sql>
-  
+
   <sql id="somewhere">
     WHERE
       category = #{category}
   </sql>
-  
+
   <sql id="someinclude">
     FROM
       <include refid="${include_target}"/>
     <include refid="somewhere"/>
   </sql>
-  
+
   <select id="testInclude">
     SELECT
       name,
