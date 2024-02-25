@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+# 0.8.0
+
+* Fix match with sql-formatter's placeholder types
+* Fix function scoping of findMapper & replaceCdata
+* Add equalsIgnoreCase replacer
+
 # 0.7.1
 
 * create namespace if only not exists

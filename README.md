@@ -644,6 +644,12 @@ WHERE
 
 ## Change Log ##
 
+### 0.8.0 ###
+
+* Fix match with sql-formatter's placeholder types
+* Fix function scoping of findMapper & replaceCdata
+* Add equalsIgnoreCase replacer
+
 ### 0.7.1 ###
 
 * create namespace if only not exists
