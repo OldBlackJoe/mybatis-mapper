@@ -80,40 +80,36 @@ function replaceCdata(rawText) {
   return rawText;
 }
 
-MybatisMapper.prototype.getStatement = function(namespace, sql, param, format) {
-  var statement = '';
-  
-  // Parameter Check
-  if (namespace == null) throw new Error('Namespace should not be null.');
-  if (myBatisMapper[namespace] == undefined) throw new Error('Namespace [' + namespace + '] not exists.');
-  if (sql == null) throw new Error('SQL ID should not be null.');
-  if (myBatisMapper[namespace][sql] == undefined) throw new Error('SQL ID [' + sql + '] not exists');
-  
-  try{
-    for (var i = 0, children; children = myBatisMapper[namespace][sql][i]; i++) {
-      // Convert SQL statement recursively
-      statement += convert.convertChildren(children, param, namespace, myBatisMapper);
-    }
-    
-    // Check not converted Parameters
-    var regexList = ['\\#{\\S*}', '\\${\\S*}'];
-    for (var i = 0, regexString; regexString = regexList[i]; i++){
-      var regex = new RegExp(regex, 'g');
-      var checkParam = statement.match(regexString);
-      
-      if (checkParam != null && checkParam.length > 0) {
-        throw new Error("Parameter " + checkParam.join(",") + " is not converted.");
-      }
-    }
+function stripQuoted(text) {
+  return text.replace(/(["'])(?:\\.|[^\\])*?\1/g, '');
+}
 
-    // SQL formatting
-    if (format != undefined && format != null){
-      statement = sqlFormatter.format(statement, format);
-    }
-  } catch (err) {
-    throw err
+MybatisMapper.prototype.getStatement = function (namespace, sql, param, format) {
+  var statement = '';
+
+  if (!namespace) throw new Error('Namespace should not be null.');
+  if (!myBatisMapper[namespace]) throw new Error(`Namespace [${namespace}] not exists.`);
+  if (!sql) throw new Error('SQL ID should not be null.');
+  if (!myBatisMapper[namespace][sql]) throw new Error(`SQL ID [${sql}] not exists`);
+
+  for (var i = 0, node; (node = myBatisMapper[namespace][sql][i]); i++) {
+    statement += convert.convertChildren(node, param, namespace, myBatisMapper);
   }
-  
+
+  var bodyForCheck = stripQuoted(statement);
+
+  ['#\\{\\S+?\\}', '\\$\\{\\S+?\\}'].forEach((pattern) => {
+    var re = new RegExp(pattern, 'g');
+    var leftovers = bodyForCheck.match(re);
+    if (leftovers && leftovers.length) {
+      throw new Error(`Parameter ${leftovers.join(',')} is not converted.`);
+    }
+  });
+
+  if (format) {
+    statement = sqlFormatter.format(statement, format);
+  }
+
   return statement;
 };
 
