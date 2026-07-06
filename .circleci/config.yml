@@ -1,9 +1,9 @@
-# Javascript Node CircleCI 2.0 configuration file
+# Javascript Node CircleCI 2.1 configuration file
 #
-# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+# Check https://circleci.com/docs/configuration-reference/ for more details
 # Writer: kd52.kim@samsung.com
 
-version: 2
+version: 2.1
 
 defaults: &defaults
   working_directory: ~/repo
