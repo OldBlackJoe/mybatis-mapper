@@ -1,0 +1,9 @@
+<mapper namespace="issue26">
+  <sql id="insertMany">
+    INSERT INTO
+      fs (dasd,sad,dsa) VALUES
+    <foreach collection ="list" item="item" separator=",">
+      (#{item.dasd},#{item.sad},#{item.dsa})
+    </foreach >
+  </sql>
+</mapper>

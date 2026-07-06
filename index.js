@@ -14,7 +14,7 @@ MybatisMapper.prototype.createMapper = function(xmls) {
   // Parse each XML files
   for (var i = 0, xml; xml = xmls[i]; i++) {
     try{
-      var rawText = replaceCdata(fs.readFileSync(xml).toString());     
+      var rawText = normalizeAttributeSpacing(replaceCdata(fs.readFileSync(xml).toString()));
       var mappers = HTML.parse(rawText);
     } catch (err){
 			throw new Error("Error occured during open XML file [" + xml + "]");
@@ -78,6 +78,12 @@ function replaceCdata(rawText) {
   }
   
   return rawText;
+}
+
+function normalizeAttributeSpacing(rawText) {
+  return rawText.replace(/<[^>]+>/g, function(tag) {
+    return tag.replace(/([A-Za-z_:][-A-Za-z0-9_:.]*)\s*=\s*/g, '$1=');
+  });
 }
 
 function stripQuotedText(text) {
