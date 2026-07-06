@@ -1,0 +1,20 @@
+<mapper namespace="issue41">
+  <select id="literalPlaceholders">
+    SELECT
+      '/data/${yyyymmdd}/log' AS path,
+      '#{notParam}' AS marker,
+      'it''s ${token}' AS phrase
+  </select>
+
+  <select id="missingOutside">
+    SELECT ${missing} AS value
+  </select>
+
+  <select id="emptyHashOutside">
+    SELECT #{} AS value
+  </select>
+
+  <select id="emptyDollarOutside">
+    SELECT ${} AS value
+  </select>
+</mapper>

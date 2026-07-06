@@ -80,6 +80,39 @@ function replaceCdata(rawText) {
   return rawText;
 }
 
+function stripQuotedText(text) {
+  var result = '';
+  var quote = null;
+
+  for (var i = 0; i < text.length; i++) {
+    var char = text[i];
+
+    if (quote == null) {
+      if (char == '\'' || char == '"') {
+        quote = char;
+      } else {
+        result += char;
+      }
+      continue;
+    }
+
+    if (char == '\\') {
+      i++;
+      continue;
+    }
+
+    if (char == quote) {
+      if (text[i + 1] == quote) {
+        i++;
+      } else {
+        quote = null;
+      }
+    }
+  }
+
+  return result;
+}
+
 MybatisMapper.prototype.getStatement = function(namespace, sql, param, format) {
   var statement = '';
   
@@ -95,11 +128,12 @@ MybatisMapper.prototype.getStatement = function(namespace, sql, param, format) {
       statement += convert.convertChildren(children, param, namespace, myBatisMapper);
     }
     
-    // Check not converted Parameters
-    var regexList = ['\\#{\\S*}', '\\${\\S*}'];
+    // Check not converted Parameters outside quoted SQL text.
+    var statementForCheck = stripQuotedText(statement);
+    var regexList = ['\\#{[^}]*}', '\\${[^}]*}'];
     for (var i = 0, regexString; regexString = regexList[i]; i++){
-      var regex = new RegExp(regex, 'g');
-      var checkParam = statement.match(regexString);
+      var regex = new RegExp(regexString, 'g');
+      var checkParam = statementForCheck.match(regex);
       
       if (checkParam != null && checkParam.length > 0) {
         throw new Error("Parameter " + checkParam.join(",") + " is not converted.");
