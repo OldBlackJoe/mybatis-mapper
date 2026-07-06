@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+# 0.9.0
+
+* Remove vulnerable development dependency chain by switching tests to the Node.js built-in test runner.
+* Update CircleCI to config 2.1 and pin a valid Node 20 image.
+* Refresh README content for the current API and CI setup.
+
 # 0.8.0
 
 * Fix match with sql-formatter's placeholder types

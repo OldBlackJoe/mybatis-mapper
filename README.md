@@ -426,11 +426,12 @@ The test suite uses the Node.js built-in test runner and runs in CircleCI with N
 
 ## Recent Changes
 
-### 0.8.1
+### 0.9.0
 
 - Removed vulnerable development dependency chain by switching tests to the Node.js built-in test runner.
 - Updated CircleCI to config `2.1`.
 - Pinned the CircleCI Node image to a valid Node 20 tag.
+- Refreshed README content for the current API and CI setup.
 
 ### 0.8.0
 
