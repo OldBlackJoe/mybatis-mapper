@@ -1,0 +1,19 @@
+<mapper namespace="issue25">
+  <sql id="nameSuffix">
+    <if test="item_name!=''">
+      and item_name = #{item_name}
+    </if>
+    <foreach collection="main_name" item="name" open="and (" close=")" index="index" separator="or">
+      main_name like CONCAT('%', #{name}, '%')
+    </foreach>
+    <if test="item_name!=''">
+      and item_name = #{item_name}
+    </if>
+  </sql>
+
+  <sql id="foreachIndex">
+    <foreach collection="main_name" item="name" index="idx" separator=",">
+      #{idx}:#{name}
+    </foreach>
+  </sql>
+</mapper>
