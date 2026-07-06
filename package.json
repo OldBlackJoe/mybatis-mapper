@@ -8,7 +8,7 @@
   },
   "contributors": [],
   "scripts": {
-    "test": "mocha"
+    "test": "node --test --require ./test/setup.js ./test/run.js"
   },
   "repository": {
     "type": "git",
@@ -28,8 +28,5 @@
     "sql-formatter": "12.2.4"
   },
   "license": "Apache-2.0",
-  "readmeFilename": "README.md",
-  "devDependencies": {
-    "mocha": "^10.2.0"
-  }
+  "readmeFilename": "README.md"
 }
