@@ -1,139 +1,82 @@
-# mybatis-mapper #
-[![CircleCI](https://circleci.com/gh/OldBlackJoe/mybatis-mapper.svg?style=svg)](https://circleci.com/gh/OldBlackJoe/mybatis-mapper)
+# mybatis-mapper
 
-mybatis-mapper can generate SQL statements from the MyBatis3 Mapper XML file in node.js. <br>
-You can also use Dynamic SQL elements, for example, &lt;if&gt;, &lt;where&gt;, &lt;foreach&gt;.
+[![npm version](https://img.shields.io/npm/v/mybatis-mapper.svg)](https://www.npmjs.com/package/mybatis-mapper)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/OldBlackJoe/mybatis-mapper/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/OldBlackJoe/mybatis-mapper/tree/master)
+[![License](https://img.shields.io/npm/l/mybatis-mapper.svg)](LICENSE)
 
-__Table of contents__
+Generate SQL strings from MyBatis 3 mapper XML files in Node.js.
 
- - [Installation](#installation)
- - [Usage](#usage)
- - [Change Log](#change-log)
+`mybatis-mapper` reads mapper XML, evaluates supported MyBatis dynamic SQL tags, replaces parameters, and optionally formats the generated SQL with `sql-formatter`.
 
-## Installation ##
+## Contents
 
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Supported Mapper Syntax](#supported-mapper-syntax)
+- [Parameters](#parameters)
+- [Dynamic SQL Examples](#dynamic-sql-examples)
+- [Formatting](#formatting)
+- [API](#api)
+- [TypeScript](#typescript)
+- [Safety Notes](#safety-notes)
+- [Development](#development)
+- [Recent Changes](#recent-changes)
+
+## Installation
+
+```sh
+npm install mybatis-mapper
 ```
-npm install --save mybatis-mapper
-```
 
-## Usage ##
-mybatis-mapper supports all of dynamic SQL elements.<br>
-* &lt;if&gt;
-* &lt;choose&gt;, &lt;when&gt;, &lt;otherwise&gt;
-* &lt;trim&gt;, &lt;where&gt;, &lt;set&gt;
-* &lt;foreach&gt;
-* &lt;bind&gt;
-* &lt;include&gt;
+Node.js `>=12` is supported. CI currently runs on Node.js 20.
 
-You can see description of Dynamic SQL of MyBatis3 in the link below.<br>
-http://www.mybatis.org/mybatis-3/dynamic-sql.html
+## Quick Start
 
-### 1) Basic ###
+Create a mapper XML file:
 
-First, prepare XML file(s) written in MyBatis3 syntax like below. <br>
-
-#### fruits.xml ####
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="fruit">  
-  <select id="testBasic">
+<mapper namespace="fruit">
+  <select id="findByCategory">
     SELECT
       name,
       category,
       price
     FROM
-      fruits 
+      fruits
     WHERE
-      category = 'apple' AND
-      <![CDATA[ price < 500 ]]>
+      category = #{category}
+      AND price &lt; ${maxPrice}
   </select>
 </mapper>
 ```
- - The XML file must have one 'mapper' element, which must have the 'namespace' attribute.
- - mybatis-mapper recognizes and parses the 'select', 'insert', 'update', and 'delete' elements in the 'mapper' element as SQL statements.
- - You can use CDATA section in xml for well-formed XML.
- - other attributes are ignored.
- 
-Second, writing Node.js codes. <br>
 
-#### fruits.js ####
-```javascript
-const mysql = require('mysql2');
+Load it and build a statement:
+
+```js
 const mybatisMapper = require('mybatis-mapper');
 
-// create the connection to database
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  database: 'test'
-});
+mybatisMapper.createMapper(['./fruits.xml']);
 
-// create the myBatisMapper from xml file
-mybatisMapper.createMapper([ './fruits.xml' ]);
+const sql = mybatisMapper.getStatement(
+  'fruit',
+  'findByCategory',
+  {
+    category: 'apple',
+    maxPrice: 500
+  },
+  {
+    language: 'sql',
+    indent: '  '
+  }
+);
 
-// SQL Parameters
-var param = {
-    category : 'apple',
-    price : 100
-}
-
-// Get SQL Statement
-var format = {language: 'sql', indent: '  '};
-var query = mybatisMapper.getStatement('fruit', 'testBasic', param, format);
-
-// Do it!
-connection.query(query, function(err, results, fields) {
-  console.log(results); 
-  console.log(fields);
-});
+console.log(sql);
 ```
 
-##### createMapper( [XML Files] ) #####
- - This method takes Array of XML files as a arguments.
- - Reads and parses the specified xml file to prepare the SQL statements.
+Result:
 
-##### getStatement(Namespace, SqlID, Parameters, format) #####
- - This method takes Namespace, SQL ID, and Parameters as a arguments.
- - Create SQL statement from XML using Parameters and return it. 
- - You can use this SQL string for Node.js MySQL Clients like mysql2. 
- - "format" argument is Optional, it can set the format of the SQL language and indent.<br> For more information, see https://www.npmjs.com/package/sql-formatter
-
-### 2) Parameters ( #{...}, ${...} ) ###
-
-#### fruits.xml ####
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="fruit">  
-  <select id="testParameters">
-    SELECT
-      name,
-      category,
-      price
-    FROM
-      fruits 
-    WHERE
-      category = #{category}
-      AND price > ${price}
-  </select>
-</mapper>
-```
-
-#### fruits.js ####
-```javascript
-var mybatisMapper = require('mybatis-mapper');
-mybatisMapper.createMapper([ './fruits.xml' ]);
-var param = {
-    category : 'apple',
-    price : 100
-}
-    
-var query = mybatisMapper.getStatement('fruit', 'testParameters', param, {language: 'sql', indent: '  '});
-console.log(query);
-```
-
-#### result SQL ####
 ```sql
 SELECT
   name,
@@ -143,435 +86,149 @@ FROM
   fruits
 WHERE
   category = 'apple'
-  AND price > 100
+  AND price < 500
 ```
 
- - As in the example above, if a variable is enclosed in #{ }, the variable is wrapped in quotation marks.
- - The other side, if the variable is enclosed in ${ }, the variable is converted as it is.
- - In general, you can use #{ } for a String variable, and ${ } for a numeric value.
+The returned value is a SQL string. You can pass it to a database client such as `mysql2`, `pg`, or another driver that accepts SQL text.
 
-### 3) &lt;if&gt; element ###
+## Supported Mapper Syntax
 
-#### fruits.xml ####
+Mapper files must contain a `mapper` element with a `namespace` attribute.
+
+The following statement and fragment tags are recognized:
+
+- `select`
+- `insert`
+- `update`
+- `delete`
+- `sql`
+
+The following dynamic SQL tags are supported:
+
+- `if`
+- `choose`, `when`, `otherwise`
+- `trim`, `where`, `set`
+- `foreach`
+- `bind`
+- `include`
+
+CDATA sections are supported. Use CDATA when XML would otherwise reject SQL operators such as `<`, `>`, or `&`.
+
 ```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="fruit">  
-  <select id="testIf">
-    SELECT
-      name,
-      category,
-      price
-    FROM
-      fruits 
-    WHERE
-      1=1
-      <if test="category != null and category !=''">
+<select id="findCheap">
+  SELECT * FROM fruits
+  WHERE <![CDATA[ price < 500 ]]>
+</select>
+```
+
+## Parameters
+
+Use `#{...}` when a value should be quoted and escaped:
+
+```xml
+WHERE category = #{category}
+```
+
+```js
+mybatisMapper.getStatement('fruit', 'find', { category: 'apple' }, null);
+```
+
+Output:
+
+```sql
+WHERE category = 'apple'
+```
+
+Use `${...}` when a value should be inserted as raw SQL text:
+
+```xml
+WHERE price > ${minPrice}
+```
+
+```sql
+WHERE price > 100
+```
+
+Parameter behavior:
+
+- `#{name}` wraps non-null values in single quotes.
+- Single quotes in `#{name}` values are escaped by doubling them.
+- `null` becomes `NULL`.
+- Arrays and objects used with `#{name}` are converted with `JSON.stringify`.
+- Nested paths such as `#{fruit.name}` and `${fruit.price}` are supported.
+- Unresolved placeholders outside SQL string literals throw an error.
+- Placeholder-looking text inside quoted SQL literals, such as `'#{notParam}'`, is left alone when no matching parameter exists.
+
+## Dynamic SQL Examples
+
+### `if` and `where`
+
+```xml
+<select id="search">
+  SELECT name, category, price
+  FROM fruits
+  <where>
+    <if test="category != null and category != ''">
+      AND category = #{category}
+    </if>
+    <if test="maxPrice != null">
+      AND price &lt; ${maxPrice}
+    </if>
+  </where>
+</select>
+```
+
+```js
+mybatisMapper.getStatement('fruit', 'search', {
+  category: 'apple',
+  maxPrice: 500
+}, { language: 'sql' });
+```
+
+### `choose`, `when`, and `otherwise`
+
+```xml
+<select id="chooseExample">
+  SELECT name, category, price
+  FROM fruits
+  <where>
+    <choose>
+      <when test="name != null">
+        AND name = #{name}
+      </when>
+      <when test="category == 'banana'">
         AND category = #{category}
-      </if>
-      <if test="price != null and price !=''">
-        AND price = ${price}
-        <if test="price >= 400">
-          AND name = 'Fuji'
-        </if>
-      </if>
-  </select>
-</mapper>
-```
-
-#### fruits.js ####
-```javascript
-var mybatisMapper = require('mybatis-mapper');
-mybatisMapper.createMapper([ './fruits.xml' ]);
-var param = {
-    category : 'apple',
-    price : 500
-}
-
-var query = mybatisMapper.getStatement('fruit', 'testIf', param, {language: 'sql', indent: '  '});
-console.log(query);
-```
-
-#### result SQL ####
-```sql
-SELECT
-  name,
-  category,
-  price
-FROM
-  fruits
-WHERE
-  1 = 1
-  AND category = 'apple'
-  AND price = 500
-  AND name = 'Fuji'
-```
-
- - You can use dynamic SQL elements repeatedly. for example, &lt;if&gt;&lt;if&gt;&lt;/if&gt;&lt;/if&gt;
- 
-### 4) &lt;trim&gt; element ###
-
-#### fruits.xml ####
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="fruit">  
-  <select id="testTrim">
-    SELECT
-      name,
-      category,
-      price
-    FROM
-      fruits 
-    <trim prefix="WHERE" prefixOverrides="AND|OR">
-        OR category = 'apple'
-        OR price = 200
-    </trim>
-  </select>
-</mapper>
-```
-
-#### fruits.js ####
-```javascript
-var mybatisMapper = require('mybatis-mapper');
-mybatisMapper.createMapper([ './fruits.xml' ]);
-var param = null;
-
-var query = mybatisMapper.getStatement('fruit', 'testTrim', param, {language: 'sql', indent: '  '});
-console.log(query);
-```
-
-#### result SQL ####
-```sql
-SELECT
-  name,
-  category,
-  price
-FROM
-  fruits
-WHERE
-  category = 'apple'
-  OR price = 200
-```
-
-### 5) &lt;where&gt; element ###
-
-#### fruits.xml ####
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="fruit">  
-  <select id="testWhere">
-    SELECT
-      name,
-      category,
-      price
-    FROM
-      fruits 
-    <where>
+      </when>
+      <otherwise>
         AND category = 'apple'
-        <if test="price != null and price !=''">
-          AND price = ${price}
-        </if>
-        AND
-    </where>
-  </select>
-</mapper>
+      </otherwise>
+    </choose>
+  </where>
+</select>
 ```
 
-#### fruits.js ####
-```javascript
-var mybatisMapper = require('mybatis-mapper');
-mybatisMapper.createMapper([ './fruits.xml' ]);
-var param = {
-    price : 500
-}
+### `foreach`
 
-var query = mybatisMapper.getStatement('fruit', 'testWhere', param, {language: 'sql', indent: '  '});
-console.log(query);
-```
-
-#### result SQL ####
-```sql
-SELECT
-  name,
-  category,
-  price
-FROM
-  fruits
-WHERE
-  category = 'apple'
-  AND price = 500
-```
-
-### 6) &lt;set&gt; element ###
-
-#### fruits.xml ####
 ```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="fruit">  
-  <update id="testSet">
-    UPDATE
-      fruits
-    <set>
-      <if test="category != null and category !=''">
-        category = #{category},
-      </if>
-      <if test="price != null and price !=''">
-        price = ${price},    
-      </if>
-    </set>
-    WHERE
-      name = #{name}
-  </update>
-</mapper>
-```
-
-#### fruits.js ####
-```javascript
-var mybatisMapper = require('mybatis-mapper');
-mybatisMapper.createMapper([ './fruits.xml' ]);
-var param = {
-    name : 'Fuji',
-    category : 'apple',
-    price : 300          
-}
-
-var query = mybatisMapper.getStatement('fruit', 'testSet', param, {language: 'sql', indent: '  '});
-console.log(query);
-```
-
-#### result SQL ####
-```sql
-UPDATE
-  fruits
-SET
-  category = 'apple',
-  price = 300
-WHERE
-  name = 'Fuji'
-```
-
-### 6) &lt;choose&gt; &lt;when&gt; &lt;otherwise&gt; element ###
-
-#### fruits.xml ####
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="fruit">  
-  <select id="testChoose">
-    SELECT
-      name,
-      category,
-      price
-    FROM
-      fruits 
-    <where>
-      <choose>
-        <when test="name != null">
-          AND name = #{name}
-        </when>
-        <when test="category == 'banana'">
-          AND category = #{category}
-          <if test="price != null and price !=''">
-            AND price = ${price}          
-          </if>
-        </when>
-        <otherwise>
-          AND category = 'apple'
-        </otherwise>
-      </choose>
-    </where>
-  </select>
-</mapper>
-```
-
-#### fruits.js ####
-```javascript
-var mybatisMapper = require('mybatis-mapper');
-mybatisMapper.createMapper([ './fruits.xml' ]);
-var param = {
-    name : null,
-    category : 'banana',
-    price : 300
-}
-
-var query = mybatisMapper.getStatement('fruit', 'testChoose', param, {language: 'sql', indent: '  '});
-console.log(query);
-```
-
-#### result SQL ####
-```sql
-SELECT
-  name,
-  category,
-  price
-FROM
-  fruits
-WHERE
-  category = 'banana'
-  AND price = 300
-```
-
-### 7) &lt;foreach&gt; element - Basic ###
-
-#### fruits.xml ####
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="fruit">  
-  <select id="testForeach">
-    SELECT
-      name,
-      category,
-      price
-    FROM
-      fruits 
-    <where>
-      category = 'apple' AND
-      <foreach collection="apples" item="name"  open="(" close=")" separator="OR">
-        <if test="name == 'Jonathan' or name == 'Fuji'">
-          name = #{name}
-        </if>        
-      </foreach>
-    </where>
-  </select>
-</mapper>
-```
-
-#### fruits.js ####
-```javascript
-var mybatisMapper = require('mybatis-mapper');
-mybatisMapper.createMapper([ './fruits.xml' ]);
-var param = {
-    apples : [ 'Jonathan', 'Mcintosh', 'Fuji' ]        
-}
-
-var query = mybatisMapper.getStatement('fruit', 'testForeach', param, {language: 'sql', indent: '  '});
-console.log(query);
-```
-
-#### result SQL ####
-```sql
-SELECT
-  name,
-  category,
-  price
-FROM
-  fruits
-WHERE
-  category = 'apple'
-  AND (
-    name = 'Jonathan'
-    OR name = 'Fuji'
-  )
-```
-
-### 8) &lt;foreach&gt; element - Advanced ###
-
-#### fruits.xml ####
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="fruit">  
-  <insert id="testInsertMulti">
-    INSERT INTO
-      fruits
-    (
-      name,
-      category,
-      price      
-    )
-    VALUES
-    <foreach collection="fruits" item="fruit"  separator=",">
-    (
-      #{fruit.name},
-      #{fruit.category},
-      ${fruit.price}
-    )
+<select id="findByNames">
+  SELECT name, category, price
+  FROM fruits
+  <where>
+    <foreach collection="names" item="name" open="name IN (" close=")" separator=",">
+      #{name}
     </foreach>
-  </insert>
-</mapper>
+  </where>
+</select>
 ```
 
-#### fruits.js ####
-```javascript
-var mybatisMapper = require('mybatis-mapper');
-mybatisMapper.createMapper([ './fruits.xml' ]);
-var param = {
-  fruits : [
-    {
-      name : 'Jonathan',
-      category : 'apple',
-      price : 100        
-    },
-    {
-      name : 'Mcintosh',
-      category : 'apple',
-      price : 500
-    }
-  ]
-}
-var query = mybatisMapper.getStatement('fruit', 'testInsertMulti', param, {language: 'sql', indent: '  '});
-console.log(query);
+```js
+mybatisMapper.getStatement('fruit', 'findByNames', {
+  names: ['Jonathan', 'Fuji']
+}, { language: 'sql' });
 ```
 
-#### result SQL ####
-```sql
-INSERT INTO
-  fruits (
-    name,
-    category,
-    price
-  )
-VALUES
-  (
-    'Jonathan',
-    'apple',
-    100
-  ),
-  (
-    'Mcintosh',
-    'apple',
-    500
-  )
-```
+Result:
 
-### 10) &lt;bind&gt; element ###
-
-#### fruits.xml ####
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="fruit">  
-  <select id="testBind">
-    <bind name="likeName" value="'%' + name + '%'"/>
-      SELECT
-        name,
-        category,
-        price
-      FROM
-        fruits 
-      WHERE
-        name like #{likeName}
-  </select>
-</mapper>
-```
-
-#### fruits.js ####
-```javascript
-var mybatisMapper = require('mybatis-mapper');
-mybatisMapper.createMapper([ './fruits.xml' ]);
-var param = {
-  name : 'Mc'
-}
-
-var query = mybatisMapper.getStatement('fruit', 'testBind', param, {language: 'sql', indent: '  '});
-console.log(query);
-```
-
-#### result SQL ####
 ```sql
 SELECT
   name,
@@ -580,161 +237,205 @@ SELECT
 FROM
   fruits
 WHERE
-  name like '%Mc%'
+  name IN ('Jonathan', 'Fuji')
 ```
 
-### 11) &lt;include&gt; element ###
+`foreach` also supports an `index` attribute:
 
-#### fruits.xml ####
 ```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="fruit">  
-  <sql id="sometable">
-    fruits
-  </sql>
-  
-  <sql id="somewhere">
-    WHERE
-      category = #{category}
-  </sql>
-  
-  <sql id="someinclude">
-    FROM
-      <include refid="${include_target}"/>
-    <include refid="somewhere"/>
-  </sql>
-  
-  <select id="testInclude">
-    SELECT
-      name,
-      category,
-      price
-    <include refid="someinclude">
-      <property name="prefix" value="Some"/>
-      <property name="include_target" value="sometable"/>
-    </include>
-  </select>
-</mapper>
+<foreach collection="names" item="name" index="idx" separator=",">
+  #{idx}:#{name}
+</foreach>
 ```
 
-#### fruits.js ####
-```javascript
-var mybatisMapper = require('mybatis-mapper');
-mybatisMapper.createMapper([ './fruits.xml' ]);
-var param = {
-    category : 'apple'
-}
+### `bind`
 
-var query = mybatisMapper.getStatement('fruit', 'testInclude', param, {language: 'sql', indent: '  '});
-console.log(query);
+```xml
+<select id="findLike">
+  <bind name="likeName" value="'%' + name + '%'"/>
+  SELECT name, category, price
+  FROM fruits
+  WHERE name LIKE #{likeName}
+</select>
 ```
 
-#### result SQL ####
-```sql
-SELECT
-  name,
-  category,
-  price
-FROM
+### `include`
+
+```xml
+<sql id="tableName">
   fruits
-WHERE
-  category = 'apple'
+</sql>
+
+<sql id="categoryWhere">
+  WHERE category = #{category}
+</sql>
+
+<select id="findWithInclude">
+  SELECT name, category, price
+  FROM <include refid="tableName"/>
+  <include refid="categoryWhere"/>
+</select>
 ```
 
-## Change Log ##
+`include` supports `property` values and parameterized `refid` values:
 
-### 0.8.0 ###
+```xml
+<include refid="${fragmentName}">
+  <property name="fragmentName" value="categoryWhere"/>
+</include>
+```
 
-* Fix match with sql-formatter's placeholder types
-* Fix function scoping of findMapper & replaceCdata
-* Add equalsIgnoreCase replacer
+### `equalsIgnoreCase`
 
-### 0.7.1 ###
+MyBatis-style case-insensitive checks are supported in `if` tests:
 
-* create namespace if only not exists
+```xml
+<if test='"PAGE1".equalsIgnoreCase(page)'>
+  AND name = #{page_size}
+</if>
+```
 
-### 0.7.0 ###
+## Formatting
 
-* Escape param key for sql string
-* Add suffix feature for TRIM
-* Fix trim suffix may be empty and param may have underscore
-* Solve grave accent issue
+The fourth argument to `getStatement` is passed to `sql-formatter`.
 
-### 0.6.8 ###
+```js
+const sql = mybatisMapper.getStatement(
+  'fruit',
+  'search',
+  { category: 'apple' },
+  {
+    language: 'mysql',
+    keywordCase: 'lower',
+    indent: '  '
+  }
+);
+```
 
-* Use escape dollar sign when using replace method
+Common options include:
 
-### 0.6.7 ###
+- `language`: `sql`, `mysql`, `db2`, `postgresql`, `sqlite`, `mariadb`, and other languages supported by `sql-formatter`
+- `indent`: string used for indentation
+- `keywordCase`: `preserve`, `upper`, or `lower`
 
-* Fix query with an apostrophe results in an error
+Pass `null` or omit the fourth argument to skip formatting:
 
-### 0.6.6 ###
+```js
+const sql = mybatisMapper.getStatement('fruit', 'search', params, null);
+```
 
-* Update dependencies for fix issue #13
+## API
 
-### 0.6.5 ###
+### `createMapper(xmlFiles)`
 
-* Fix Unexpected end of input error
+Reads one or more mapper XML files and stores their statements by namespace.
 
-### 0.6.4 ###
+```js
+mybatisMapper.createMapper([
+  './mappers/fruits.xml',
+  './mappers/orders.xml'
+]);
+```
 
-* Fix JSON data type parsing (arrays/objects)
+Calling `createMapper` more than once adds to the in-memory mapper registry. Existing namespaces are reused.
 
-### 0.6.3 ###
+### `getStatement(namespace, statementId, params, format)`
 
-* Fix bug that Null parameter was not converted.
+Builds a SQL string from a mapped statement.
 
-### 0.6.2 ###
+```js
+const sql = mybatisMapper.getStatement(
+  'fruit',
+  'findByCategory',
+  { category: 'apple' },
+  { language: 'sql' }
+);
+```
 
-* Hot fix for &lt;foreach&gt; element.
+Arguments:
 
-### 0.6.1 ###
+- `namespace`: mapper namespace, for example `fruit`
+- `statementId`: statement or SQL fragment id
+- `params`: plain object with parameter values, or `null`
+- `format`: optional `sql-formatter` options, or `null`
 
-* Improved parameter conversion logic.
-* Bug fix for &lt;trim&gt; &lt;where&gt; elements.
+Throws when:
 
-### 0.6.0 ###
+- the namespace is missing
+- the statement id is missing
+- params is not a plain object or `null`
+- a placeholder outside quoted SQL text cannot be converted
+- the XML contains unsupported markup in a statement body
 
-* Added typings for use with TypeScript.
+### `getMapper()`
 
-### 0.5.3 ###
+Returns the current in-memory mapper registry.
 
-* Hot fix for &lt;include&gt; element.
+```js
+const mapper = mybatisMapper.getMapper();
+```
 
-### 0.5.2 ###
+## TypeScript
 
-* Error Handling
+Type definitions are included.
 
-### 0.5.1 ###
+```ts
+import mybatisMapper = require('mybatis-mapper');
 
-* Hot fix for &lt;foreach&gt; element.
+mybatisMapper.createMapper(['./fruits.xml']);
 
-### 0.5.0 ###
+const sql: string = mybatisMapper.getStatement(
+  'fruit',
+  'findByCategory',
+  { category: 'apple' },
+  { language: 'sql' }
+);
+```
 
-* Support &lt;include&gt; element.
-* Do not formatting SQL when 'format' parameter is null
-* Bug fix
+## Safety Notes
 
-### 0.4.0 ###
+`mybatis-mapper` produces an interpolated SQL string, not a prepared statement.
 
-* Support &lt;set&gt; element.
-* Support &lt;bind&gt; element.
-* SQL formatting using [sql-formatter](https://www.npmjs.com/package/sql-formatter). 
-* Bug fix
+Prefer `#{...}` for values. It quotes and escapes common string characters before inserting them into the SQL string.
 
-### 0.3.0 ###
+Use `${...}` only for trusted SQL fragments, identifiers, or numeric values you have already validated. Raw interpolation can create SQL injection vulnerabilities if user input is passed through unchecked.
 
-* Support CDATA section
-* Bug fix & Error Handling
+Mapper XML should be application-controlled. Do not evaluate mapper files supplied by untrusted users.
 
-### 0.2.0 ###
+## Development
 
-* Change XML parsing library xml2js to [html-parse-stringify2](https://www.npmjs.com/package/html-parse-stringify2).
-* Dynamic SQL elements can use repeatedly. for example, &lt;if&gt;&lt;if&gt;&lt;/if&gt;&lt;/if&gt; 
-* Support &lt;choose&gt; &lt;when&gt; &lt;otherwise&gt; element.
-* Support &lt;trim&gt; element.
+Install dependencies:
 
-### 0.1.0 ###
+```sh
+npm ci
+```
 
-* Initial Version
+Run tests:
+
+```sh
+npm test
+```
+
+Run a security audit:
+
+```sh
+npm audit --audit-level=low
+```
+
+The test suite uses the Node.js built-in test runner and runs in CircleCI with Node.js 20.
+
+## Recent Changes
+
+### 0.8.1
+
+- Removed vulnerable development dependency chain by switching tests to the Node.js built-in test runner.
+- Updated CircleCI to config `2.1`.
+- Pinned the CircleCI Node image to a valid Node 20 tag.
+
+### 0.8.0
+
+- Fixed compatibility with `sql-formatter` placeholder handling.
+- Fixed mapper parsing helpers so nested mapper lookup works reliably.
+- Added support for `equalsIgnoreCase` in dynamic `if` expressions.
+
+See [CHANGELOG.md](CHANGELOG.md) for older release history.
