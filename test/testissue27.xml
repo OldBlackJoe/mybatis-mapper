@@ -1,0 +1,5 @@
+<mapper namespace="issue27">
+  <select id="withoutFormat">
+    SELECT name FROM users WHERE id = #{id}
+  </select>
+</mapper>

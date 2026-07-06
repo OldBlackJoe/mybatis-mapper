@@ -15,6 +15,9 @@
     "url": "https://github.com/OldBlackJoe/mybatis-mapper.git"
   },
   "main": "index.js",
+  "engines": {
+    "node": ">=12"
+  },
   "keywords": [
     "node.js",
     "mybatis",

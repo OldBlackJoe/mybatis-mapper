@@ -1,6 +1,5 @@
 var fs = require('fs');
 var HTML = require('html-parse-stringify');
-var sqlFormatter = require("sql-formatter");
 var convert = require('./lib/convert');
 var myBatisMapper = {};
 
@@ -119,6 +118,25 @@ function stripQuotedText(text) {
   return result;
 }
 
+function isFormatterCompatibilityError(err) {
+  return err != null && err.message != null && (
+    err.message.indexOf('Invalid regular expression') > -1 ||
+    err.message.indexOf('Object.values(...).flat is not a function') > -1
+  );
+}
+
+function formatSql(statement, format) {
+  try {
+    var sqlFormatter = require("sql-formatter");
+    return sqlFormatter.format(statement, format);
+  } catch (err) {
+    if (isFormatterCompatibilityError(err)) {
+      throw new Error("SQL formatting requires Node.js 12 or newer. Upgrade Node.js or call getStatement without the format argument.");
+    }
+    throw err;
+  }
+}
+
 MybatisMapper.prototype.getStatement = function(namespace, sql, param, format) {
   var statement = '';
   
@@ -148,7 +166,7 @@ MybatisMapper.prototype.getStatement = function(namespace, sql, param, format) {
 
     // SQL formatting
     if (format != undefined && format != null){
-      statement = sqlFormatter.format(statement, format);
+      statement = formatSql(statement, format);
     }
   } catch (err) {
     throw err
