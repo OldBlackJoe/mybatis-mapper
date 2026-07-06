@@ -1,0 +1,5 @@
+<mapper namespace="issue34">
+  <select id="quoteParam">
+    SELECT #{address} AS address
+  </select>
+</mapper>
