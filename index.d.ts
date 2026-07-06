@@ -35,10 +35,26 @@ declare namespace MybatisMapper {
     | "trino"
     | "tsql";
 
+  export type KeywordCase = "preserve" | "upper" | "lower";
+  export type IndentStyle = "standard" | "tabularLeft" | "tabularRight";
+  export type CommaPosition = "before" | "after" | "tabular";
+  export type LogicalOperatorNewline = "before" | "after";
+
   export type Format = {
     language?: FormatLanguage;
     indent?: string;
     params?: Params;
+    keywordCase?: KeywordCase;
+    tabWidth?: number;
+    useTabs?: boolean;
+    indentStyle?: IndentStyle;
+    logicalOperatorNewline?: LogicalOperatorNewline;
+    tabulateAlias?: boolean;
+    commaPosition?: CommaPosition;
+    expressionWidth?: number;
+    linesBetweenQueries?: number;
+    denseOperators?: boolean;
+    newlineBeforeSemicolon?: boolean;
   };
 
   export function createMapper(xmls: string[]): void;

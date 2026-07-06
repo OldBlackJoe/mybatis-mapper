@@ -1,0 +1,5 @@
+<mapper namespace="issue18">
+  <select id="lowercaseKeywords">
+    SELECT name FROM users WHERE id = #{id}
+  </select>
+</mapper>
