@@ -16,8 +16,27 @@ declare namespace MybatisMapper {
       | undefined;
   };
 
+  export type FormatLanguage =
+    | "bigquery"
+    | "db2"
+    | "hive"
+    | "mariadb"
+    | "mysql"
+    | "n1ql"
+    | "plsql"
+    | "postgresql"
+    | "redshift"
+    | "singlestoredb"
+    | "snowflake"
+    | "spark"
+    | "sql"
+    | "sqlite"
+    | "transactsql"
+    | "trino"
+    | "tsql";
+
   export type Format = {
-    language?: "sql" | "db2" | "n1ql" | "plsql";
+    language?: FormatLanguage;
     indent?: string;
     params?: Params;
   };

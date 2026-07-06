@@ -1,0 +1,5 @@
+<mapper namespace="issue24">
+  <select id="notEquals">
+    SELECT * FROM users WHERE name != #{name}
+  </select>
+</mapper>
