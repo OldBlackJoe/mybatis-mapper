@@ -18,21 +18,21 @@ jobs:
 
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          - v1-dependencies-
+          - v2-dependencies-{{ checksum "package-lock.json" }}
+          - v2-dependencies-
 
-      - run: npm install
-
-      - run: npm install mocha
+      - run:
+          name: Install dependencies
+          command: npm ci
 
       - run:
           name: Run tests
-          command: npm test ./test/test.js
+          command: npm test
 
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v2-dependencies-{{ checksum "package-lock.json" }}
 
       - persist_to_workspace:
           root: ~/repo

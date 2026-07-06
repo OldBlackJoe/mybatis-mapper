@@ -15,7 +15,6 @@ describe("Unit Tests for Grave accent", function () {
       format
     );
 
-    console.log(query);
     assert.equal(
       query,
       `
